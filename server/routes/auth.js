@@ -2,6 +2,8 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
+
+
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
@@ -18,9 +20,13 @@ router.post("/register", async (req, res) => {
   // Create JWT token (like a digital keycard)
   const payload = { user: { id: user.id, role: user.role } };
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+  //const refreshToken=jwt.sign(payload, process.env.JWT_REFRESH_SECRET,{expiresIn:"7h"});
+  //refreshToken.push(refreshToken); 
+  //res.cookie('refreshtoken',refreshToken,{httpOnly:true, secure:false,sameSite:strict})
+   
 
   // Send token back to user
-  res.json({ token ,email,password,role});
+  res.json({ token,email,password,role});
 });
 
 
@@ -38,13 +44,19 @@ router.post("/login", async (req, res) => {
   // Create and send token
   const payload = { user: { id: user.id, role: user.role } };
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+  //const refreshToken=jwt.sign(payload, process.env.JWT_REFRESH_SECRET,{expiresIn:"7h"});
+  //refreshToken.push(refreshToken); 
+  //res.cookie('refreshtoken',refreshToken,{httpOnly:true, secure:false,sameSite:strict})
 
-  res.json({ token ,
+  res.json({ token,
     email,
     password,
     role:user.role
   });
 });
+
+
+
 
 export default router;
 

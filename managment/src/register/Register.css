@@ -2,9 +2,9 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    
 }
-.login-container{
+
+.register-container{
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -14,8 +14,7 @@
 
 }
 
-
-.login-wrapper{
+.register-wrapper{
     position: relative;
     max-width: 900px;
     width: 100%;
@@ -26,10 +25,11 @@
     overflow: hidden;
 
 }
-.login-description{
+
+.register-desc{
 position: absolute;
 top: 0;
-right: 0;
+left: 0;
 width: 50%;
 height: 100%;
 background: #654ea3;  /* fallback for old browsers */
@@ -42,28 +42,31 @@ justify-content: center;
 color: white;
 padding: 40px;
 text-align: center;
-border-top-left-radius: 150px;
-border-bottom-left-radius: 100px;
+border-top-right-radius: 150px;
+border-bottom-right-radius: 100px;
+
 }
 
 
 
-.login-description h2{
+.register-desc h2{
     font-size: 2.5em;
-    margin-bottom: 60px;
+    margin-bottom: 50px;
     font-weight: 1000;
     
 }
 
 
-.login-description p{
+.register-desc p{
     font-size: 1rem;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
     opacity: 1;
+    line-height: 1.6;
+   
 }
 
 
-.login-desc-btn{
+.register-desc-btn{
     padding: 12px 40px;
     border: 2px solid white;
     background: transparent;
@@ -75,18 +78,19 @@ border-bottom-left-radius: 100px;
     cursor: pointer;
 }
 
-.login-desc-btn:hover{
+.register-desc-btn:hover{
     background: white;
     color: #654ea3;
     transform: scale(1);
+
 }
 
 
 
-.login-form-container{
+.register-form-container{
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
     width: 50%;
     height: 100%;
     display: flex;
@@ -95,25 +99,26 @@ border-bottom-left-radius: 100px;
 }
 
 
-.login-form-box h2{
+.register-form-box h2{
     font-size: 2rem;
     color: #eaafc8;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     font-weight: 700;
     align-self: center;
-    transform: translateX(60px);
+    
 
 }
 
- 
-.login-form{
+
+.register-form{
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
 
-.login-input{
+
+.register-input, .register-select{
     width: 100%;
     padding: 15px 20px;
     background: #f5f5f5;
@@ -126,21 +131,45 @@ border-bottom-left-radius: 100px;
 }
 
 
-.login-input:focus{
+.register-input:focus,.register-select:focus{
     background:#fce9f1;
     box-shadow: #eaafc8;
 }
+
+
+
+.register-select{
+    cursor: pointer;
+    background-position: right 10px center ;
+}
+
+.register-select option{
+    width: 100%;
+    padding: 15px 20px;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    color: #3f3068;
+
+}
+.register-select option:hover{
+    background:#fce9f1;
+    box-shadow: #eaafc8;
+}
+
+
 
 .login-input::placeholder{
     color: #654ea3;
 }
 
-.text{
-   color:#eaafc8;
-}
 
 
-.submit-btn{background: #654ea3;  /* fallback for old browsers */
+
+.register-btn{background: #654ea3;  /* fallback for old browsers */
 background: -webkit-linear-gradient(to right, #eaafc8, #654ea3);  /* Chrome 10-25, Safari 5.1-6 */
 background: linear-gradient(to right, #eaafc8, #654ea3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 color: white;
@@ -152,13 +181,13 @@ cursor: pointer;
 letter-spacing: 1px;
 margin-top: 10px;
 width: 100%;
-padding: 15px;
+padding: 14px;
 
 
 }
 
 
-.submit-btn:hover{
+.register-btn:hover{
     transform: translateY(-2px);
     box-shadow: #3f3068;
     color: #3f3068;
@@ -167,21 +196,21 @@ padding: 15px;
 }
     
 
-.submit-btn:active{
+.register-btn:active{
     transform: translateY(0);
 }
 
 
-@keyframes slideInUp{
-    from{
-        opacity: 0;
-        transform: translateY(50px);
-    }
-    to{
-        opacity: 1;
-        transform: translateY(0);
-    }
+
+.register-input:focus{
+    background:#fce9f1;
+    box-shadow: #eaafc8;
 }
+
+.register-input::placeholder{
+    color: #654ea3;
+}
+
 
 
 /* animation de base */
@@ -199,13 +228,13 @@ padding: 15px;
     transform: translateX(0);
   }
 }
-.login-description {
-  animation: slideFromRight 1.5s ease forwards;
+.register-desc {
+  animation: slideFromLeft 1.5s ease forwards;
 }
 
-@keyframes slideFromRight {
+@keyframes slideFromLeft {
   from {
-    transform: translateX(100%);
+    transform: translateX(-100%);
   }
   to {
     transform: translateX(0);
