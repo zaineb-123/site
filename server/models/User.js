@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 
 // Define user structure (like a blueprint)
 const userSchema = new mongoose.Schema({
+  profil:{type:String,required:false},
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },

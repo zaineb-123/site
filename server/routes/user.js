@@ -1,9 +1,28 @@
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
 import User from "../models/User.js";
+import multer from "multer";
 
 
 const router = express.Router();
+const storage = multer.diskStorage({
+  destination:(req, file, cb) =>{
+    cb(null, 'uploads/');
+  },
+  filename:(req, file, cb)=> {
+    cb(null,Date.now()+"-"+file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage,
+  fileFilter:(req,file,cb)=>{
+    if(file.mimetype.startsWith("image/")){
+      cb(null,true);
+    }else{
+      cb(new Error("only images allowed"))
+    }
+  },
+ });
 
 // authMiddleware verifies token before allowing access
 router.get("/", authMiddleware, async (req, res) => {
@@ -36,20 +55,21 @@ router.get('/:id',authMiddleware,async(req,res)=>{
   }
 });
 
-router.put('/:id',authMiddleware,async(req,res)=>{
+router.put('/:id',authMiddleware,upload.single ("profil"),async(req,res)=>{
   try {
     const{id}=req.params;
     const{username,email,role}=req.body;
-    const updateUser=await User.findByIdAndUpdate({_id:id},{
-      username,
-      email,
-      role
+    const updateData={username,email,role};
+    if(req.file){
+      updateData.profil=req.file.path;
+    }
+    const updateUser=await User.findByIdAndUpdate(id,updateData,{new:true
 
-    })
+    });
     return res.status(200).json({success:true,updateUser})
     
   } catch (error) {
-    res.status(500).json({msg:"serveur error",error:err.message})
+    res.status(500).json({msg:"serveur error",error:error.message})
   }
 
 });
@@ -62,7 +82,8 @@ router.delete('/:id',authMiddleware,async(req,res)=>{
     return res.status(200).json({success:true,deleteUser})
     
   } catch (error) {
-    res.status(500).json({msg:"serveur error",error:err.message})
+    console.error(error)
+    res.status(500).json({msg:"serveur error",error:error.message})
   }
 
 });

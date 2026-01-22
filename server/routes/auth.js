@@ -1,20 +1,40 @@
 import express from "express";
 import jwt from "jsonwebtoken";
+import multer from "multer";
 import User from "../models/User.js";
 
 
 
 const router = express.Router();
+const storage = multer.diskStorage({
+  destination:(req, file, cb) =>{
+    cb(null, 'uploads/');
+  },
+  filename:(req, file, cb)=> {
+    cb(null,Date.now()+"-"+file.originalname);
+  },
+});
 
-router.post("/register", async (req, res) => {
+const upload = multer({ storage: storage,
+  fileFilter:(req,file,cb)=>{
+    if(file.mimetype.startsWith("image/")){
+      cb(null,true);
+    }else{
+      cb(new Error("only images allowed"))
+    }
+  },
+ });
+
+router.post("/register",upload.single("profil"), async (req, res) => {
   const { username, email, password,role } = req.body;
+  const profil=req.file?req.file.path:null;
 
   // Check if user already exists
   let user = await User.findOne({ email });
   if (user) return res.status(400).json({ msg: "User already exists" });
 
   // Create and save new user
-  user = new User({ username, email, password,role });
+  user = new User({ username, email, password,role ,profil});
   await user.save(); 
 
   // Create JWT token (like a digital keycard)
@@ -26,7 +46,7 @@ router.post("/register", async (req, res) => {
    
 
   // Send token back to user
-  res.json({ token,email,password,role});
+  res.json({ token,email,password,role,profil});
 });
 
 

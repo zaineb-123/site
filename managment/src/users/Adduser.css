@@ -1,0 +1,230 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+
+.adduser-container{
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+}
+
+
+.adduser-wrapper{
+    position: relative;
+    max-width: 1100px;
+    width: 100%;
+    height: 650px;
+    background-color: white;
+    border-radius: 40px;
+    box-shadow: 0 20px 60px rgb(0, 0,0,0.3);
+    overflow: hidden;
+
+}
+
+
+.adduser-desc{
+position: absolute;
+top: 0;
+left: 0;
+width: 50%;
+height: 100%;
+background: #654ea3;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #eaafc8, #654ea3);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #eaafc8, #654ea3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+color: white;
+padding: 40px;
+text-align: center;
+border-top-right-radius: 150px;
+border-bottom-right-radius: 100px;
+}
+
+.nom{
+    font-size: 3em;
+    font-weight: 1000;
+    color: #654ea3;
+    text-align: center;
+    margin-top: 20px;
+    transform: translateY(70px);
+    
+}
+
+.adduser-desc p{
+    font-size: 1rem;
+    margin-bottom: 30px;
+    opacity: 1;
+    line-height: 1.6;
+}
+
+.icon{
+    margin-top: 20px;
+    opacity: 0.9;
+    align-items: center;
+    transform: translateX(-10px);
+    
+}
+
+
+.adduser-form-container{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+
+}
+
+.adduser-form-box h2{
+    font-size: 2rem;
+    color: #eaafc8;
+    margin-bottom: 30px;
+    font-weight: 700;
+   text-align: center;
+ 
+    
+}
+
+.adduser-form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.text{
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+   
+}
+
+
+.adduser-input{
+     width: 100%;
+    padding: 15px 20px;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    color: #3f3068;
+}
+
+
+.adduser-input:focus{
+    background:#fce9f1;
+    box-shadow: #eaafc8;
+}
+
+.adduser-input::placeholder{
+    color: #654ea3;
+}
+
+
+.btn-group{
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    flex-direction: column;
+}
+
+.submitt-btn{
+    background: #654ea3;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #eaafc8, #654ea3);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #eaafc8, #654ea3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+color: white;
+border: none;
+border-radius: 10px;
+font-size: 1rem;
+font-weight: 500;
+cursor: pointer;
+letter-spacing: 1px;
+margin-top: 10px;
+width: 100%;
+padding: 15px;
+}
+
+.submitt-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: #3f3068;
+    color: #3f3068;
+    font-weight: 900;
+    font-style: italic;
+}
+
+.cancel-btn{
+background: transparent;
+border:2px solid #3f3068 ;
+color: #3f3068;
+border-radius: 10px;
+font-size: 1rem;
+font-weight: 500;
+cursor: pointer;
+letter-spacing: 1px;
+margin-top: 10px;
+width: 100%;
+padding: 15px;
+}
+
+.cancel-btn:hover{
+transform: translateY(-2px);
+    box-shadow: #3f3068;
+    color: #3f3068;
+    font-weight: 900;
+    font-style: italic;
+}
+
+@keyframes slideInUp{
+    from{
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* animation de base */
+.page-animate {
+  animation: slideFade 1s ease forwards;
+}
+
+@keyframes slideFade {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.login-desc {
+  animation: slideFromRight 1.5s ease forwards;
+}
+
+@keyframes slideFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
