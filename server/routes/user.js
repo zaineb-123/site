@@ -55,23 +55,27 @@ router.get('/:id',authMiddleware,async(req,res)=>{
   }
 });
 
-router.put('/:id',authMiddleware,upload.single ("profil"),async(req,res)=>{
+router.put('/:id', authMiddleware, upload.single("profil"), async (req, res) => {
   try {
-    const{id}=req.params;
-    const{username,email,role}=req.body;
-    const updateData={username,email,role};
-    if(req.file){
-      updateData.profil=req.file.path;
+    const { id } = req.params;
+    const { username, email, role } = req.body;
+
+    const updateData = { username, email, role };
+
+    if (req.file) {
+      updateData.profil = req.file.path;
     }
-    const updateUser=await User.findByIdAndUpdate(id,updateData,{new:true
 
-    });
-    return res.status(200).json({success:true,updateUser})
-    
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true }
+    ).select("-password");
+
+    res.status(200).json(updatedUser);
   } catch (error) {
-    res.status(500).json({msg:"serveur error",error:error.message})
+    res.status(500).json({ msg: "server error", error: error.message });
   }
-
 });
 
 

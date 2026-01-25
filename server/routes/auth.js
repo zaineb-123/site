@@ -63,7 +63,7 @@ router.post("/login", async (req, res) => {
 
   // Create and send token
   const payload = { user: { id: user.id, role: user.role } };
-  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "2h" });
   //const refreshToken=jwt.sign(payload, process.env.JWT_REFRESH_SECRET,{expiresIn:"7h"});
   //refreshToken.push(refreshToken); 
   //res.cookie('refreshtoken',refreshToken,{httpOnly:true, secure:false,sameSite:strict})

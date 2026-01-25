@@ -33,7 +33,6 @@ import React from 'react'
         }
     return (
         <>
-        <h2 className='nom'>User Managment</h2>
         <div className='adduser-container page-animate'>
             <div className='adduser-wrapper'>
                 <div className='adduser-desc'>

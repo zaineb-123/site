@@ -4,6 +4,9 @@ import { columns,UserButtons } from "../utils/userhelper"
 import axios from "axios"
 import {data, Link } from 'react-router-dom'
 import './AdminDashboard.css'
+import Navbar from "../Navbar/Navbar"
+
+
 
 
 const AdminDashboard = () => {
@@ -63,22 +66,22 @@ const AdminDashboard = () => {
     setFilterUsers(users)
   },[users])
    const handlefilter =(e)=>{
-    const value=e.target.value.toLowerCase()
-    const records =users.filter((users)=>
-      users.username.toLowerCase().includes(value),
+    const value=e.target.value.toLowerCase()      // recuper le text saisi 
+    const records =users.filter((users)=>        
+      users.username.toLowerCase().includes(value),       // filtre selon username
      
     )
      setFilterUsers(records)
- 
    }
   return(
     userLoading ? (
       <p> Loading users... </p>
     ):(
       <>
-      
+      <Navbar/>
       <div className="dashboard-header">
-      <h1 className="dashboard-title">Admin Dashboard</h1>
+     <h2 className="dashboard-title"></h2>
+      
       </div>
       <div className="dashboard-actions">
       <div className="search">

@@ -93,7 +93,7 @@ const Edituser = () => {
     <>{userLoading? <div>Loading...</div>:
       <>
         <div>
-          <h2 className='nom'>User Managment</h2>
+          <h2 className='nom'></h2>
           <div className='adduser-container page-animate'>
             <div className='adduser-wrapper'>
               <div className='adduser-desc'>

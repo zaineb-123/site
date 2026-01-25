@@ -12,9 +12,15 @@
             const response=await axios.post("http://localhost:4000/api/auth/login",{email,password});
             localStorage.setItem("token", response.data.token)
                 localStorage.setItem("role", response.data.role)
-            console.log(response)
+                localStorage.setItem("user", JSON.stringify({
+      username: response.data.username,
+      role: response.data.role
+    }));
+                
             if(response.data.role==="admin"){
-                Navigate('/admin-dashboard')
+                Navigate('/dashboardstat')
+            }else{
+                Navigate('/myuserprofil')
             }
             } catch (error) {
                 console.log(error)
