@@ -5,11 +5,14 @@
     const Login = () => {
         const [email,setEmail]=useState('')
         const [password,setPassword]=useState('')
+        const [error, setError] = useState('')
         const Navigate= useNavigate()
         const handleSubmit= async(e)=>{
             e.preventDefault()
+            setError('')
             try {
-            const response=await axios.post("http://localhost:4000/api/auth/login",{email,password});
+            const response=await axios.post("http://localhost:4000/api/auth/login",{email,password},{ withCredentials: true });
+             console.log('Login response:', response.data); 
             localStorage.setItem("token", response.data.token)
                 localStorage.setItem("role", response.data.role)
                 localStorage.setItem("user", JSON.stringify({

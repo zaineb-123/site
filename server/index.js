@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
 import authRoutes from"./routes/auth.js";
 import userRoutes from"./routes/user.js";
@@ -18,6 +19,7 @@ const app = express();
 
 // Middleware (functions that run on every request)
 app.use(express.json());  // Parses JSON data from requests
+app.use(cookieParser());
 app.use(cors({ origin: ["http://localhost:5173"] , credentials:true}));  // Allows frontend to connect
 
 // Routes (URL endpoints)

@@ -25,7 +25,32 @@ const upload = multer({ storage: storage,
   },
  });
 
-router.post("/register",upload.single("profil"), async (req, res) => {
+router.post("/register", async (req, res) => {
+  const { username, email, password,role } = req.body;
+  const profil=req.file?req.file.path:null;
+
+  // Check if user already exists
+  let user = await User.findOne({ email });
+  if (user) return res.status(400).json({ msg: "User already exists" });
+
+  // Create and save new user
+  user = new User({ username, email, password,role});
+  await user.save(); 
+
+  // Create JWT token (like a digital keycard)
+  const payload = { user: { id: user.id, role: user.role } };
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+  const refreshToken=jwt.sign(payload, process.env.JWT_REFRESH_SECRET,{expiresIn:"7d"});
+  res.cookie('refreshToken',refreshToken,{httpOnly:true, secure:false, sameSite: 'strict',maxAge: 7 * 24 * 60 * 60 * 1000})
+  user.refreshToken = refreshToken;
+  await user.save();
+
+
+  // Send token back to user
+  res.json({ token,email,password,role,profil});
+});
+
+router.post("/add",upload.single("profil"), async (req, res) => {
   const { username, email, password,role } = req.body;
   const profil=req.file?req.file.path:null;
 
@@ -40,14 +65,15 @@ router.post("/register",upload.single("profil"), async (req, res) => {
   // Create JWT token (like a digital keycard)
   const payload = { user: { id: user.id, role: user.role } };
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
-  //const refreshToken=jwt.sign(payload, process.env.JWT_REFRESH_SECRET,{expiresIn:"7h"});
-  //refreshToken.push(refreshToken); 
-  //res.cookie('refreshtoken',refreshToken,{httpOnly:true, secure:false,sameSite:strict})
-   
+  const refreshToken=jwt.sign(payload, process.env.JWT_REFRESH_SECRET,{expiresIn:"7d"});
+  res.cookie('refreshToken',refreshToken,{httpOnly:true, secure:false, sameSite: 'strict',maxAge: 7 * 24 * 60 * 60 * 1000})
+  user.refreshToken = refreshToken;
+  await user.save();
 
   // Send token back to user
   res.json({ token,email,password,role,profil});
 });
+
 
 
 router.post("/login", async (req, res) => {
@@ -63,17 +89,47 @@ router.post("/login", async (req, res) => {
 
   // Create and send token
   const payload = { user: { id: user.id, role: user.role } };
-  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "2h" });
-  //const refreshToken=jwt.sign(payload, process.env.JWT_REFRESH_SECRET,{expiresIn:"7h"});
-  //refreshToken.push(refreshToken); 
-  //res.cookie('refreshtoken',refreshToken,{httpOnly:true, secure:false,sameSite:strict})
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+  const refreshToken=jwt.sign(payload, process.env.JWT_REFRESH_SECRET,{expiresIn:"7d"});
+  res.cookie('refreshToken',refreshToken,{httpOnly:true, secure:false, sameSite: 'strict',maxAge: 7 * 24 * 60 * 60 * 1000})
+  user.refreshToken = refreshToken;
+  await user.save();
 
   res.json({ token,
     email,
     password,
-    role:user.role
+    role:user.role,
+    refreshToken
   });
 });
+
+router.post("/refresh", async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(401).json({ msg: "No refresh token provided" });
+  }
+
+  try {
+    // Verify refresh token
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    
+    // Find user and verify refresh token matches
+    const user = await User.findById(decoded.user.id);
+    if (!user || user.refreshToken !== refreshToken) {
+      return res.status(403).json({ msg: "Invalid refresh token" });
+    }
+
+    // Generate new access token
+    const payload = { user: { id: user.id, role: user.role } };
+    const newToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    res.json({ token: newToken });
+    } catch (error) {
+    res.status(403).json({ msg: "Invalid or expired refresh token" });
+  }
+});
+
 
 
 

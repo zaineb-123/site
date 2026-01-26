@@ -20,7 +20,7 @@ import React from 'react'
             formData.append("password",password);
             formData.append("role",role);
             formData.append("profil",profil);
-            axios.post('http://localhost:4000/api/auth/register',formData,{
+            axios.post('http://localhost:4000/api/auth/add',formData,{
                 headers:{
                     "Content-Type": "multipart/form-data",
                 },

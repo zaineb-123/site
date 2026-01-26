@@ -10,16 +10,21 @@
         const [password,setPassword]=useState("")
         const [role,setRole]=useState("admin")
         const navigate=useNavigate()
-        const handlesubmit =(e)=>{
-            e.preventDefault()
-            axios.post('http://localhost:4000/api/auth/register',{username,email,password,role})
-            .then(result=> {console.log(result)
-            navigate('/Login')
-            })
-            .catch(error=>console.log(error));
-            alert('Error during registration please try again')
-            
-        }
+        const handlesubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post(
+      "http://localhost:4000/api/auth/register",
+      { username, email, password, role }
+    );
+    console.log(res.data);
+    navigate("/Login");
+  } catch (error) {
+    console.log(error.response?.data || error);
+    alert(error.response?.data?.msg || "Registration failed");
+  }
+};
+
     return (
         <div className='register-container page-animate'>
             <div className='register-wrapper'>

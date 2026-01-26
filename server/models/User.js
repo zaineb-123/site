@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, default: "user" },  // user or admin
+  refreshToken: { type: String } 
 });
 
 // Hash password before saving (auto-runs before save)
