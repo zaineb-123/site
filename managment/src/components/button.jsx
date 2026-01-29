@@ -1,32 +1,46 @@
-// const ButtonProps=React.HTMLAttributes<HTMLButtonElement>&{
-//     variant?:'primary'|'secondary'
-    
-// };
-// export default function Button({className,variant,...props}:ButtonProps){
-    
-// }
-import './button.css'
 import React from "react";
+import PropTypes from "prop-types";
+import "./Button.css";
 
+const Button = ({
+  children,
+  variant = "primary",
+  disabled = false,
+  icon,
+  iconPosition = "left",
+  onClick,
+  type = "button",
+  className = "",
 
-const button=props=>{
-   const btnEnableDisable = !props.isDisabled ? "btn-enable" : "btn-disabled";
-    return(
-        <button
-        className={`btn ${btnEnableDisable}`}
-        disabled={props.isDisabled}
+}) => {
+  
+  
 
+  return (
+    <button
+      type={type}
+      className={`btn btn-${variant}${className}`}
+      onClick={onClick}
+      disabled={disabled}
+      
+  
+    >
+      {icon && children && iconPosition === "left" && (
+        <span className="btn__icon btn__icon--left">{icon}</span>
+      )}
 
+      {children && <span className="btn__content">{children}</span>}
 
-        >
-            {props.value}
+      {icon && children &&iconPosition === "right" && (
+        <span className="btn__icon btn__icon--right">{icon}</span>
+      )}
 
-        </button>
-    )
-}
-
-button.defaultProps={
-    type:"button",
-    disabled:true
+      {icon && !children && (
+        <span className="btn__icon btn__icon--only">{icon}</span>
+      )}
+    </button>
+  );
 };
-export default button;
+
+
+export default Button;

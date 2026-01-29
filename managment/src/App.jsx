@@ -14,6 +14,7 @@ import UserProfil from './pages/profil/UserProfil'
 import AdminLayout from "./layout/AdminLayout"
 import UserLayout from "./layout/UserLayout"
 
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -22,6 +23,7 @@ const App = () => {
 
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+     
 
 
         <Route element={<AdminLayout />}>

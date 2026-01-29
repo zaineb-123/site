@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { register } from '../../../services/auth/register'
 import './Register.css'
+import Button from '../../../components/Button'
 
 const Register = () => {
     const [username, setUsername] = useState("")
@@ -38,7 +39,7 @@ const Register = () => {
                     <h2>Welcome Back!</h2>
                     <p>Enter your personal details to use all of site features</p>
                     <Link to="/Login">
-                        <button className='register-desc-btn'>SIGN IN</button>
+                        <Button variant='outline'>SIGN IN</Button>
                     </Link>
                 </div>
 
@@ -101,13 +102,12 @@ const Register = () => {
                                 </div>
                             )}
 
-                            <button 
+                            <Button 
                                 type='submit' 
-                                className='register-btn'
-                                disabled={registerMutation.isPending}
+                                loading={registerMutation.isPending}
                             >
                                 {registerMutation.isPending ? 'REGISTERING...' : 'REGISTER'}
-                            </button>
+                            </Button>
                         </form>
                     </div>
                 </div>

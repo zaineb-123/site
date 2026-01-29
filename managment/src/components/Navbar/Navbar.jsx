@@ -8,6 +8,7 @@
       import PeopleIcon from "@mui/icons-material/People"
       import PersonIcon from "@mui/icons-material/Person"
       import LogoutIcon from "@mui/icons-material/Logout"
+      import Button from "../button"
 
 
       const fetchUserProfile = async () => {
@@ -45,24 +46,25 @@
         return (
           <>
               <nav className="navbar">
-                  <button
-            className="menu-btn"
+                  <Button
+                  variant="transparent"  icon={ <MenuIcon /> }
+           
             onClick={() => setOpenMenu(prev => !prev)}
                  >
-          <MenuIcon />
-        </button>
+         
+        </Button>
 
 
               
               
               {user && (
         <div className="user-section">
-          <span>Hello {user.username}</span>
+          <span style={{whiteSpace:"nowrap"}}>Hello {user.username}</span>
 
-          <button className="logout-top" onClick={handleLogout}>
-            <LogoutIcon />
-            <span className="logout-text">Logout</span>
-          </button>
+          <Button variant="transparent" icon={<LogoutIcon />} iconPosition="left" onClick={handleLogout}>
+            
+            <span >Logout</span>
+          </Button>
         </div>
       )}
             </nav>

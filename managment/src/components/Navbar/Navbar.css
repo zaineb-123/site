@@ -40,34 +40,6 @@
 }
 
 
-.logout-top {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: transparent;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.logout-top svg {
-  font-size: 20px;
-}
-
-.logout-top:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: scale(1.05);
-}
-
-.logout-text {
-  font-size: 14px;
-}
-
-
 .overlay {
   position: fixed;
   inset: 0;

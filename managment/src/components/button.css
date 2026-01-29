@@ -1,67 +1,94 @@
-.btn.btn-enable {
-  display: block;
+.btn{
 
-  width: 150px;
-
-  margin: 0 auto;
-
-  margin-top: 20px;
-
-  border: 1px solid #25729a;
-
-  border-radius: 3px;
-
-  text-align: center;
-
-  color: #ffffff;
-
-  background-color: #c7306c;
-
-  margin-bottom: 20px;
-
-  padding: 7px 7px 7px 7px;
-  transform: translateY(800px);
+background: #654ea3;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #eaafc8, #654ea3);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #eaafc8, #654ea3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+color: white;
+border: none;
+border-radius: 10px;
+font-size: 1rem;
+font-weight: 500;
+cursor: pointer;
+letter-spacing: 1px;
+margin-top: 10px;
+width: 100%;
+padding: 15px;
 }
 
-.btn.btn-disabled {
-  display: block;
 
-  width: 150px;
+.btn:hover{
+   transform: translateY(-2px);
+    box-shadow: #3f3068;
+    color: #3f3068;
+    font-weight: 900;
+    font-style: italic;
 
-  margin: 0 auto;
-
-  margin-top: 20px;
-
-  opacity: 0.65;
-
-  cursor: not-allowed;
-
-  border: 1px solid #25729a;
-
-  border-radius: 3px;
-
-  text-align: center;
-
-  color: #ffffff;
-
-  background-color: #3093c7;
-
-  margin-bottom: 20px;
-
-  padding: 7px 7px 7px 7px;
-  transform: translateY(800px);
 }
 
-.btn:hover {
-  border: 1px solid #1c5675;
 
-  background-color: #26759e;
+.btn-outline{
+  padding: 12px 40px;
+    border: 2px solid white;
+    background: transparent;
+    color: white;
+    border-radius: 40px;
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 600;
+    cursor: pointer;
 
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    left bottom,
-    color-stop(0%, #26759e),
-    color-stop(100%, #133d5b)
-  );
 }
+
+
+
+.btn-outline:hover{
+  background: white;
+    color: #654ea3;
+    transform: scale(1);
+}
+
+
+
+
+.btn-transparent{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.btn__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.btn__icon--left {
+  margin-right: 8px;
+}
+
+.btn__icon--right {
+  margin-left: 8px;
+}
+
+.btn__icon--only {
+  margin: 0;
+}
+
+/* Icon-only button */
+.btn--icon-only {
+  padding: 8px;
+  border-radius: 8px;
+}
+.btn--icon-only:hover{
+  background: rgba(255, 255, 255, 0.15);
+}
+

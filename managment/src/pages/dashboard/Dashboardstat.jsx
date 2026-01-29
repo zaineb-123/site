@@ -4,7 +4,9 @@ import { Pie } from "react-chartjs-2";
 import 'chart.js/auto';
 import './dashboardstat.css';
 import {useQuery,useQueryClient} from'@tanstack/react-query'
-import Button from "../../components/button";
+import { FaUser, FaArrowRight, FaTrash, FaCheck, FaHome } from 'react-icons/fa';
+import TrashIcon from "../../components/icons/TrashIcon";
+
 
 
 
@@ -22,6 +24,7 @@ const fetchUsers= async ()=>{
         return res.data
 }
 
+ 
 const Dashboardstat = () => {
   const queryClient=useQueryClient()
 
@@ -31,6 +34,11 @@ const Dashboardstat = () => {
     queryKey:["users"],
     queryFn:fetchUsers,
   })
+
+
+   const handleClick = () => {
+    console.log("Button clicked!");
+  };
 
  
 
@@ -55,6 +63,7 @@ const Dashboardstat = () => {
   const lastUsers = [...users].reverse().slice(0, 3);
 
   return (
+    <>
     <div className="dashboard-container">
       <h1 className="dashboard-title">Admin Dashboard</h1>
 
@@ -109,6 +118,10 @@ const Dashboardstat = () => {
       </div>
     </div>
 
+
+   
+   
+</>
     
   );
 };
