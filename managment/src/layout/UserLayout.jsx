@@ -1,6 +1,6 @@
 import React from "react"
 import { Outlet } from "react-router-dom"
-import NavbarUser from "../Navbar/NavbarUser"
+import NavbarUser from "../components/Navbar/NavbarUser"
 
 const AdminLayout = () => {
   return (

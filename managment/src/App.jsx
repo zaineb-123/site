@@ -1,15 +1,15 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import Login from "./login/Login"
-import Register from "./register/Register"
+import Login from "./pages/auth/login/Login"
+import Register from "./pages/auth/register/Register"
 
-import AdminDashboard from "./dashboard/AdminDashboard"
+import AdminDashboard from "./pages/dashboard/AdminDashboard"
 import Adduser from './users/Adduser'
 import Edituser from './users/Edituser'
-import MyProfil from './users/MyProfil'
-import Dashboardstat from './dashboard/Dashboardstat'
-import UserProfil from './users/UserProfil'
+import MyProfil from './pages/profil/MyProfil'
+import Dashboardstat from './pages/dashboard/Dashboardstat'
+import UserProfil from './pages/profil/UserProfil'
 
 import AdminLayout from "./layout/AdminLayout"
 import UserLayout from "./layout/UserLayout"

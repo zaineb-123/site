@@ -228,3 +228,63 @@ transform: translateY(-2px);
     transform: translateX(0);
   }
 }
+
+
+
+@media (max-width: 480px) {
+
+  .adduser-container {
+    padding: 10px;
+    margin-top: 60px; 
+  }
+
+  .adduser-wrapper {
+    display: flex;
+    flex-direction: column; 
+    height: auto;
+    border-radius: 20px;
+  }
+
+  
+  .adduser-desc {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .nom {
+    font-size: 2rem;
+    transform: none;
+    margin-top: 10px;
+  }
+
+  .adduser-desc p {
+    font-size: 0.9rem;
+  }
+
+
+  .adduser-form-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 25px 15px;
+  }
+
+  .adduser-form-box h2 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+
+  .adduser-input {
+    padding: 12px 15px;
+    font-size: 0.9rem;
+  }
+
+  .submitt-btn,
+  .cancel-btn {
+    padding: 13px;
+    font-size: 0.9rem;
+  }
+}

@@ -1,80 +1,100 @@
 import React, { useEffect, useState } from "react"
 import DataTable from "react-data-table-component"
-import { columns,UserButtons } from "../utils/userhelper"
+import { columns,UserButtons } from "../../utils/userhelper"
 import axios from "axios"
-import {data, Link } from 'react-router-dom'
+import {data, Link, useNavigate } from 'react-router-dom'
 import './AdminDashboard.css'
-import Navbar from "../Navbar/Navbar"
+import Navbar from "../..//components/Navbar/Navbar"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 
-
-
-
-const AdminDashboard = () => {
-  const [users, setUsers] = useState([])
-  const [userLoading, setUserLoading] = useState(false)
-  const [FilterUsers,setFilterUsers]=useState([])
-  const onUserDelete=async(id)=>{
-    
-      setUsers(prev => prev.filter(user => user._id !== id))
-    
-  }
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      setUserLoading(true)
-      try {
-        const token = localStorage.getItem("token")
-        console.log("TOKEN :", token)
-
-        const response = await axios.get(
-          "http://localhost:4000/api/users",
+const fetchUsers= async ()=>{
+  const token = localStorage.getItem("token")
+  console.log(token)
+  if (!token) throw new Error("no token found")
+    const res = await axios.get(
+          "http://192.168.1.141:4000/api/users",
           {
             headers: {
               Authorization: `Bearer ${token}`
             }
           }
         )
+        return res.data
+}
 
-        console.log(response.data)
-
-        
-        const data = response.data.map(user => ({
-          _id:user._id,
-          username: user.username,
-          email: user.email,
-          role: user.role,
-          createdAt:user.createdAt,
-          profil:user.profil,
-          action:<UserButtons _id={user._id} onUserDelete={onUserDelete}/>
-          
-        }))
-
-        setUsers(data);
-        setFilterUsers(data)
-
-      } catch (error) {
-        console.log(error.response?.data || error)
-        alert("error")
-      } finally {
-        setUserLoading(false)
+const deleteUser = async (id) => {
+  const token = localStorage.getItem("token")
+  const response = await axios.delete(
+    `http://192.168.1.141:4000/api/users/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
       }
     }
+  )
+  
+}
 
-    fetchUsers()
-  }, [])
+
+const AdminDashboard = () => {
+  const queryClient=useQueryClient()
+  const [filterUsers, setFilterUsers] = useState([])
+  const navigate =useNavigate()
+  const handleEDit=(id)=>{
+    navigate(`/admin-dashboard/edit/${id}`)
+  }
+
+  
+
+  const {data:users=[],isLoading,isError}=useQuery({
+    queryKey:["users"],
+    queryFn:fetchUsers,
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] })
+    },
+    onError: (error) => {
+      alert(error.response?.data?.error || "Erreur lors de la suppression")
+    }
+  })
+
+
   useEffect(()=>{
-    setFilterUsers(users)
+    if(users.length){
+
+       setFilterUsers(users)
+    }
+   
   },[users])
+  
    const handlefilter =(e)=>{
-    const value=e.target.value.toLowerCase()      // recuper le text saisi 
+    const value=e.target.value.toLowerCase()     
     const records =users.filter((users)=>        
-      users.username.toLowerCase().includes(value),       // filtre selon username
+      users.username.toLowerCase().includes(value),       
      
     )
-     setFilterUsers(records)
-   }
+     setFilterUsers(records)}
+
+
+     const handledelete=(id)=>{
+      const confirmation=window.confirm('delete!!')
+      if(confirmation){
+        deleteMutation.mutate(id)
+      }
+     }
+
+
+     const dataactions =filterUsers.map((user)=>({
+      ...user,
+      onDelete:handledelete,
+      onEdit:handleEDit
+     }))
+   
   return(
-    userLoading ? (
+    isLoading ? (
       <p> Loading users... </p>
     ):(
       <>
@@ -108,7 +128,7 @@ const AdminDashboard = () => {
       <div className="table-container">
       <DataTable
             columns={columns}
-            data={FilterUsers}
+            data={dataactions}
             pagination
             highlightOnHover
             striped
@@ -119,6 +139,6 @@ const AdminDashboard = () => {
     )
     )
   
-}
+  }
 
 export default AdminDashboard

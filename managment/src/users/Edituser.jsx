@@ -32,7 +32,7 @@ const Edituser = () => {
         console.log("TOKEN :", token)
 
         const response = await axios.get(
-          `http://localhost:4000/api/users/${id}`,
+          `http://192.168.1.141:4000/api/users/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -72,7 +72,7 @@ const Edituser = () => {
                formData.append("profil",profil);
             }
             const token=localStorage.getItem("token");
-            const response= await axios.put(`http://localhost:4000/api/users/${id}`,formData,
+            const response= await axios.put(`http://192.168.1.141:4000/api/users/${id}`,formData,
                 {
                     headers:{
                         Authorization:`Bearer ${token}`,

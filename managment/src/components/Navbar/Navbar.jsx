@@ -1,6 +1,7 @@
       import React, { useEffect, useState } from "react"
       import { useNavigate } from "react-router-dom"
       import "./Navbar.css"
+      import { useQuery } from "@tanstack/react-query"
 
       import MenuIcon from "@mui/icons-material/Menu"
       import DashboardIcon from "@mui/icons-material/Dashboard"
@@ -8,37 +9,38 @@
       import PersonIcon from "@mui/icons-material/Person"
       import LogoutIcon from "@mui/icons-material/Logout"
 
+
+      const fetchUserProfile = async () => {
+        const token = localStorage.getItem("token")
+        if (!token) throw new Error("no tokenfound")
+
+        const res = await fetch("http://192.168.1.141:4000/api/users/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+
+        if (!res.ok) throw new Error("erreur")
+          return res.json()
+        }
+
       const Navbar = () => {
-        const [user, setUser] = useState(null)
         const [openMenu, setOpenMenu] = useState(false)
         const navigate = useNavigate()
 
-        useEffect(() => {
-          const fetchUserProfile = async () => {
-            try {
-              const token = localStorage.getItem("token")
-              if (!token) return
 
-              const res = await fetch("http://localhost:4000/api/users/me", {
-                headers: { Authorization: `Bearer ${token}` },
-              })
-
-              if (res.ok) {
-                const data = await res.json()
-                setUser(data)
-              }
-            } catch (err) {
-              console.error("Erreur profil:", err)
-            }
+        const {data:user,isLoading,isError}=useQuery({
+            queryKey:["userProfile"],
+            queryFn: fetchUserProfile,
           }
+           
+          )
 
-          fetchUserProfile()
-        }, [])
 
         const handleLogout = () => {
           localStorage.clear()
           navigate("/login")
         }
+
+        
 
         return (
           <>

@@ -2,6 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import multer from "multer";
 import User from "../models/User.js";
+import axios from 'axios';
 
 
 
@@ -47,7 +48,7 @@ router.post("/register", async (req, res) => {
 
 
   // Send token back to user
-  res.json({ token,email,password,role,profil});
+  res.json({ token,email:user.email,password,role:user.role,profil});
 });
 
 router.post("/add",upload.single("profil"), async (req, res) => {
@@ -77,7 +78,7 @@ router.post("/add",upload.single("profil"), async (req, res) => {
 
 
 router.post("/login", async (req, res) => {
-  const { email, password,role } = req.body;
+  const { email, password } = req.body;
 
   // Find user by email
   const user = await User.findOne({ email });
@@ -89,14 +90,14 @@ router.post("/login", async (req, res) => {
 
   // Create and send token
   const payload = { user: { id: user.id, role: user.role } };
-  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "7h" });
   const refreshToken=jwt.sign(payload, process.env.JWT_REFRESH_SECRET,{expiresIn:"7d"});
   res.cookie('refreshToken',refreshToken,{httpOnly:true, secure:false, sameSite: 'strict',maxAge: 7 * 24 * 60 * 60 * 1000})
   user.refreshToken = refreshToken;
   await user.save();
 
   res.json({ token,
-    email,
+    email:user.email,
     password,
     role:user.role,
     refreshToken
@@ -124,11 +125,43 @@ router.post("/refresh", async (req, res) => {
     const payload = { user: { id: user.id, role: user.role } };
     const newToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.json({ token: newToken });
+    res.json({ token: newToken,
+       user: { id: user.id, role: user.role, email: user.email }
+     });
     } catch (error) {
     res.status(403).json({ msg: "Invalid or expired refresh token" });
   }
 });
+
+const axiosInstance = axios.create({
+  withCredentials: true
+});
+
+axiosInstance.interceptors.response.use(
+  (response)=>response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        const res = await axios.get('/api/auth/refresh', { withCredentials: true });
+               const newToken = res.data.token;
+          originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+        
+        return axiosInstance(originalRequest);
+      } catch (err) {
+        return Promise.reject(err);
+      }
+    }
+
+    
+  
+  
+    return Promise.reject(error);
+}
+);
+
+
 
 
 

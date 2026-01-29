@@ -3,25 +3,36 @@ import axios from "axios";
 import { Pie } from "react-chartjs-2";
 import 'chart.js/auto';
 import './dashboardstat.css';
+import {useQuery,useQueryClient} from'@tanstack/react-query'
+import Button from "../../components/button";
+
+
+
+const fetchUsers= async ()=>{
+  const token = localStorage.getItem("token")
+  if (!token) throw new Error("no token found")
+    const res = await axios.get(
+          "http://192.168.1.141:4000/api/users",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        return res.data
+}
 
 const Dashboardstat = () => {
-  const [users, setUsers] = useState([]);
+  const queryClient=useQueryClient()
 
-  useEffect(() => {
-    const fetchUsers = async () => {      // recupere les utilisateurs depuis le backend
-      try {
-        const token = localStorage.getItem("token");        // recuoere token stocke dans le navigateur
-        const response = await axios.get("http://localhost:4000/api/users", {         // requete GET + header (token )
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUsers(response.data);    // stocke la liste dans users 
-      } catch (error) {
-        console.error("Erreur chargement users:", error);
-      }
-    };
 
-    fetchUsers();
-  }, []);
+
+  const {data:users=[]}=useQuery({
+    queryKey:["users"],
+    queryFn:fetchUsers,
+  })
+
+ 
 
   const adminCount = users.filter(u => u.role === "admin").length; // calcul le nb filtrer de condition role=admin
   const userCount = users.filter(u => u.role === "user").length;   // calcul le nb filtrer de condition role=user
@@ -46,6 +57,17 @@ const Dashboardstat = () => {
   return (
     <div className="dashboard-container">
       <h1 className="dashboard-title">Admin Dashboard</h1>
+
+
+
+      {/* <Button
+       isDisabled={false}
+       value={"active"}
+      ></Button>
+        <Button
+       isDisabled={true}
+       value={"-----"}
+      ></Button> */}
 
       <div className="dashboard-stats">
         <div className="stat-card admin-card">
@@ -86,6 +108,8 @@ const Dashboardstat = () => {
         </div>
       </div>
     </div>
+
+    
   );
 };
 

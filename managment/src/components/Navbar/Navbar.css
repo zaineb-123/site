@@ -124,3 +124,52 @@
 .sidebar button:hover {
   background: rgba(255, 255, 255, 0.15);
 }
+
+
+@media (max-width: 480px) {
+
+
+  .navbar {
+    height: 52px;
+    padding: 0 10px;
+  }
+
+ 
+  .menu-btn svg {
+    font-size: 22px;
+    transform: translateX(10px);
+  }
+
+  
+
+  .logout-text {
+    display: none; 
+  }
+
+  .logout-top svg {
+    font-size: 18px;
+  }
+
+
+  .sidebar {
+    width: 64px; 
+    top: 52px;
+   
+   
+  }
+
+  .sidebar button {
+    justify-content: center;
+    padding: 14px 0;
+  }
+
+  .sidebar button span {
+    display: none; 
+  }
+
+  .sidebar button svg {
+    font-size: 24px; 
+  }
+
+  
+}

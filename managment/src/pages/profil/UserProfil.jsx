@@ -1,57 +1,92 @@
 import React, { useEffect, useState } from "react"
 import "./myprofil.css"
+import {useQuery,useMutation,useQueryClient} from '@tanstack/react-query'
+
+const fetchUserProfile=async()=>{
+  const token=localStorage.getItem("token")
+  const res=await fetch("http://192.168.1.141:4000/api/users/me", {headers:{
+    Authorization:`Bearer ${token}`}
+  
+})
+if (!res.ok){
+  throw new Error("Erreur chargement profil");
+  
+}
+ return res.json()
+}
+
+const updateuserprofile=async({userId,formData})=>{
+    const token=localStorage.getItem("token")
+   const res= await fetch(`http://192.168.1.141:4000/api/users/${userId}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          body: formData
+        })
+        if (!res.ok){
+  throw new Error("Erreur chargement profil");
+  
+}
+ return res.json()
+
+}
+
 
 const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false)
+  const [editedData, setEditedData] = useState({})
+  const queryClient=useQueryClient()
 
-  const [userData, setUserData] = useState({
-    id: "",
-    username: "",
-    email: "",
-    role: "",
-    profil: ""
+
+  const{data:user}=useQuery({
+    queryKey:['userProfile'],
+    queryFn:fetchUserProfile,
+   onSuccess:(data)=>setEditedData({
+  id:data._id,
+  username:data.username||"",
+  email:data.email||"",
+  role:data.role||"",
+  profil:data.profil||""
+
+})
   })
 
-  const [editedData, setEditedData] = useState({ ...userData })
+  const mutation=useMutation({
+    mutationFn:updateuserprofile,
+    onSuccess:(data)=>{
+      queryClient.setQueryData(['userProfile'],data
+      
+      
+        
+        
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const token = localStorage.getItem("token")
-        const res = await fetch("http://localhost:4000/api/users/me", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-
-        if (res.ok) {
-          const user = await res.json()
-          const loadedData = {
-            id: user._id,
-            username: user.username || "",
-            email: user.email || "",
-            role: user.role || "",
-            profil: user.profil || ""
-          }
-          setUserData(loadedData)
-          setEditedData(loadedData)
-        }
-      } catch (err) {
-        console.error("Erreur chargement profil:", err)
-      }
+      )
+      setIsEditing(false)
     }
+  })
 
-    fetchUserProfile()
-  }, [])
+  
 
   const handleEdit = () => {
     setIsEditing(true)
-    setEditedData({ ...userData })
+    setEditedData({ 
+      username:user.username,
+      email:user.email,
+      role:user.role,
+      profil:user.profil
+     })
   }
 
   const handleCancel = () => {
     setIsEditing(false)
-    setEditedData({ ...userData })
+    setEditedData({ 
+      username:user.username,
+      email:user.email,
+      role:user.role,
+      profil:user.profil
+    })
   }
 
   const handleChange = (field, value) => {
@@ -66,8 +101,7 @@ const MyProfile = () => {
   }
 
   const handleSave = async () => {
-    try {
-      const token = localStorage.getItem("token")
+    
       const formData = new FormData()
 
       formData.append("username", editedData.username)
@@ -77,37 +111,11 @@ const MyProfile = () => {
       if (editedData.profil instanceof File) {
         formData.append("profil", editedData.profil)
       }
-
-      const res = await fetch(
-        `http://localhost:4000/api/users/${userData.id}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-          body: formData
-        }
-      )
-
-      if (res.ok) {
-        const updatedUser = await res.json()
-        setUserData({
-          id: updatedUser.updateUser._id,
-          username: updatedUser.updateUser.username,
-          email: updatedUser.updateUser.email,
-          role: updatedUser.updateUser.role,
-          profil: updatedUser.updateUser.profil
-        })
-        setIsEditing(false)
-        alert("Profil mis à jour avec succès")
-      } else {
-        alert("Erreur lors de la mise à jour")
-      }
-    } catch (err) {
-      console.error(err)
-      alert("Erreur serveur")
-    }
-  }
+      mutation.mutate({
+        userId:user._id,
+        formData
+      })  }
+  console.log(user)
 
   return (
     <div className="profile-container">
@@ -138,13 +146,14 @@ const MyProfile = () => {
                     type="file"
                     accept="image/*"
                     onChange={handleFileChange}
+                     disabled={mutation.isPending}
                   />
                 </label>
               )}
             </div>
           </div>
 
-          <h1 className="username">{userData.username}</h1>
+          <h1 className="username">{user?.username}</h1>
         </div>
 
       
@@ -159,9 +168,10 @@ const MyProfile = () => {
                 onChange={(e) =>
                   handleChange("username", e.target.value)
                 }
+                disabled={mutation.isPending}
               />
             ) : (
-              <div className="readonly">{userData.username}</div>
+              <div className="readonly">{user?.username}</div>
             )}
           </div>
 
@@ -174,9 +184,10 @@ const MyProfile = () => {
                 onChange={(e) =>
                   handleChange("email", e.target.value)
                 }
+                disabled={mutation.isPending}
               />
             ) : (
-              <div className="readonly">{userData.email}</div>
+              <div className="readonly">{user?.email}</div>
             )}
           </div>
 
@@ -188,12 +199,14 @@ const MyProfile = () => {
                 onChange={(e) =>
                   handleChange("role", e.target.value)
                 }
+                disabled={mutation.isPending}
               >
                 <option value="admin">admin</option>
                 <option value="user">user</option>
               </select>
             ) : (
-              <div className="readonly">{userData.role}</div>
+              <div className="readonly">{user?.role}</div>
+       
             )}
           </div>
 
@@ -202,8 +215,8 @@ const MyProfile = () => {
               <button onClick={handleEdit}>Modifier</button>
             ) : (
               <>
-                <button onClick={handleSave}>Sauvegarder</button>
-                <button onClick={handleCancel}>Annuler</button>
+                <button onClick={handleSave} disabled={mutation.isPending}>Sauvegarder</button>
+                <button onClick={handleCancel} disabled={mutation.isPending}>Annuler</button>
               </>
             )}
           </div>
@@ -215,3 +228,21 @@ const MyProfile = () => {
 }
 
 export default MyProfile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,6 +5,24 @@ import React from 'react'
     import { useNavigate } from 'react-router-dom'
     import './Adduser.css'
     import add from '../assets/add-user.svg'
+    import { useMutation } from '@tanstack/react-query'
+
+
+
+
+
+    const adduser= async(FormData)=>{
+        const response =await axios.post('http://192.168.1.141:4000/api/auth/add',FormData,
+            
+        )
+
+        return response.data
+    }
+
+
+
+
+
     const Adduser = () => {
         const [username, setusername]=useState("")
         const [email, setEmail]=useState("")
@@ -12,6 +30,23 @@ import React from 'react'
         const [role,setRole]=useState("admin")
         const [profil,setProfil]=useState("")
         const navigate=useNavigate()
+        
+
+
+            const addMutation=useMutation({
+                 mutationFn:adduser,
+
+                 onSuccess:(data)=>{
+                    console.log('add successful',data)
+                    navigate('/admin-dashboard')
+                 },
+
+                 onError:(error)=>{
+                    console.log('add failed ',error)
+                    alert(error.response?.data?.msg||'add failed')
+                 }
+                        
+            })
         const handlesubmit =(e)=>{
             e.preventDefault()
             const formData=new FormData();
@@ -20,15 +55,9 @@ import React from 'react'
             formData.append("password",password);
             formData.append("role",role);
             formData.append("profil",profil);
-            axios.post('http://localhost:4000/api/auth/add',formData,{
-                headers:{
-                    "Content-Type": "multipart/form-data",
-                },
-            })
-            .then(result=> {console.log(result)
-            navigate('/admin-dashboard')
-            })
-            .catch(error=>console.log(error));
+
+            addMutation.mutate(formData)
+          
             
         }
     return (
@@ -56,6 +85,7 @@ import React from 'react'
                     name='username'
                     className='adduser-input'
                     onChange={(e)=> setusername(e.target.value)} 
+                    disabled={addMutation.isPending}
                     />
                 </div>
                 <div>
@@ -65,12 +95,13 @@ import React from 'react'
                     name='email'
                     className='adduser-input'
                     onChange={(e)=> setEmail(e.target.value)} 
+                    disabled={addMutation.isPending}
                     />
                 </div>
 
                 <div>
                     <label className='text' htmlFor="role">role</label>
-                    <select className='adduser-input' name='role' onChange={(e)=> setRole(e.target.value)}>
+                    <select className='adduser-input' name='role' onChange={(e)=> setRole(e.target.value)} disabled={addMutation.isPending}>
                         <option value="admin" >admin</option>
                         <option value="user" >user</option>
                     </select>
@@ -82,16 +113,27 @@ import React from 'react'
                     name='password' 
                     className='adduser-input'
                     onChange={(e)=> setPassword(e.target.value)} 
+                    disabled={addMutation.isPending}
                     />
                 </div>
 
                 <div>
                     <label className='text' >Your photo</label>
-                    <input  className='adduser-input' type="file" name='profil' placeholder='upload image' accept='image/*' onChange={(e)=> setProfil(e.target.files[0])} />
+                    <input  className='adduser-input' type="file" name='profil' placeholder='upload image' accept='image/*' onChange={(e)=> setProfil(e.target.files[0])} disabled={addMutation.isPending} />
 
                 </div>
+
+                {addMutation.isError && (
+                                <div className='error-message'>
+                                    {addMutation.error?.response?.data?.msg || 
+                                     'add failed. Please try again.'}
+                                </div>
+                            )}
                 <div className='btn-group'>
-                    <button className='submitt-btn'>ADD User</button>
+                    <button className='submitt-btn'
+                    disabled={addMutation.isPending}
+                    > {addMutation.isPending ? 'adding...' : 'add'}</button>
+                   
                
                     <Link to="/admin-dashboard">
                     <button className='cancel-btn'>Cancel</button>
