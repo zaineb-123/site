@@ -4,7 +4,7 @@ import {useQuery,useMutation,useQueryClient} from '@tanstack/react-query'
 
 const fetchUserProfile=async()=>{
   const token=localStorage.getItem("token")
-  const res=await fetch("http://192.168.1.141:4000/api/users/me", {headers:{
+  const res=await fetch("http://localhost:4000/api/users/me", {headers:{
     Authorization:`Bearer ${token}`}
   
 })
@@ -17,7 +17,7 @@ if (!res.ok){
 
 const updateuserprofile=async({userId,formData})=>{
     const token=localStorage.getItem("token")
-   const res= await fetch(`http://192.168.1.141:4000/api/users/${userId}`,
+   const res= await fetch(`http://localhost:4000/api/users/${userId}`,
         {
           method: "PUT",
           headers: {

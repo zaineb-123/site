@@ -15,7 +15,7 @@
         const token = localStorage.getItem("token")
         if (!token) throw new Error("no tokenfound")
 
-        const res = await fetch("http://192.168.1.141:4000/api/users/me", {
+        const res = await fetch("http://localhost:4000/api/users/me", {
           headers: { Authorization: `Bearer ${token}` },
         })
 

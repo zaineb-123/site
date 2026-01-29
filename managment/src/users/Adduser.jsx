@@ -12,7 +12,7 @@ import React from 'react'
 
 
     const adduser= async(FormData)=>{
-        const response =await axios.post('http://192.168.1.141:4000/api/auth/add',FormData,
+        const response =await axios.post('http://localhost:4000/api/auth/add',FormData,
             
         )
 

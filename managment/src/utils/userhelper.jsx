@@ -6,7 +6,7 @@ export const columns = [
   {
     name: "profil",
     selector: row => row.profil?(
-      <img src={`http://192.168.1.141:4000/${row.profil}`} className="profil-pic"/>
+      <img src={`http://localhost:4000/${row.profil}`} className="profil-pic"/>
     ):"-",
     sortable: true
   },

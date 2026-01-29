@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export const login = async (email, password) => {
-  const response = await axios.post("http://192.168.1.141:4000/api/auth/login",
+  const response = await axios.post("http://localhost:4000/api/auth/login",
     { email, password },
     { withCredentials: true }
   )

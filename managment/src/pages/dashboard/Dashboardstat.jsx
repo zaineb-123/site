@@ -14,7 +14,7 @@ const fetchUsers= async ()=>{
   const token = localStorage.getItem("token")
   if (!token) throw new Error("no token found")
     const res = await axios.get(
-          "http://192.168.1.141:4000/api/users",
+          "http://localhost:4000/api/users",
           {
             headers: {
               Authorization: `Bearer ${token}`
