@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import "./myprofil.css"
 import {useQuery,useMutation,useQueryClient} from '@tanstack/react-query'
 
+
 const fetchUserProfile=async()=>{
   const token=localStorage.getItem("token")
   const res=await fetch("http://localhost:4000/api/users/me", {headers:{
@@ -212,7 +213,7 @@ const MyProfile = () => {
 
           <div className="form-actions">
             {!isEditing ? (
-              <button onClick={handleEdit}>Modifier</button>
+              <Button variant="primary" onClick={handleEdit}>Modifier</Button>
             ) : (
               <>
                 <button onClick={handleSave} disabled={mutation.isPending}>Sauvegarder</button>

@@ -192,18 +192,36 @@
 
 
 .form-actions button:nth-child(1) {
-  background: linear-gradient(to right, #7c3aed, #a78bfa);
+  background: linear-gradient(to right, #eaafc8, #654ea3); 
+  color: white;
+  border: none;
+  border-radius: 40px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 1px;
+  padding: 15px;
+  width: 50%;
+  transition: all 0.3s ease;
+
 }
 
 
 .form-actions button:nth-child(2) {
-  background: linear-gradient(to right, #22c55e, #16a34a);
-}
+padding: 12px 40px;
+  border: 2px solid #654ea3; 
+  background: transparent;
+  color: #654ea3;
+  border-radius: 40px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;}
 
 
 .form-actions button:nth-child(3) {
-  background: linear-gradient(to right, #9ca3af, #6b7280);
-}
+background: #654ea3;
+  color: white;}
 
 
 .form-actions button:hover {

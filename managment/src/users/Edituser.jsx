@@ -80,7 +80,14 @@ const Edituser = () => {
                     },
                 }
             );
-            if (response.data.success){
+            if (response.data){
+                setUsers(prev => ({
+                    ...prev,
+                    username: response.data.username,
+                    email: response.data.email,
+                    role: response.data.role,
+                    profil: response.data.profil
+                }));
                 navigate("/admin-dashboard");
             }
         }catch (error){
@@ -122,7 +129,7 @@ const Edituser = () => {
                     
                     <div>
                     <label  className='text'>Your photo</label>
-                    <input  className='adduser-input' type="file" name='image' placeholder='upload image' accept='image/*' onChange={(e)=>setProfil(e.target.files[0])}/>
+                    <input  className='adduser-input' type="file" name='profil' placeholder='upload image' accept='image/*' onChange={(e)=>setProfil(e.target.files[0])}/>
 
                 </div>
                 <div>

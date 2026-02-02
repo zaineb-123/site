@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "./Navbar.css"
 import { useQuery } from "@tanstack/react-query"
+import Button from "../button"
 
 import MenuIcon from "@mui/icons-material/Menu"
 import DashboardIcon from "@mui/icons-material/Dashboard"
@@ -13,7 +14,7 @@ const fetchUserProfile = async () => {
         const token = localStorage.getItem("token")
         if (!token) throw new Error("no tokenfound")
 
-        const res = await fetch("http://192.168.1.141:4000/api/users/me", {
+        const res = await fetch("http://localhost:4000/api/users/me", {
           headers: { Authorization: `Bearer ${token}` },
         })
 
@@ -33,10 +34,13 @@ const Navbar = () => {
    
   )
 
-  const handleLogout = () => {
-    localStorage.clear()
-    navigate("/login")
-  }
+  const handleLogout = async () => {
+  await fetch("http://localhost:4000/api/auth/logout", {
+    method: "POST",
+    credentials: "include",
+  });
+  navigate("/login");
+};
   if(isLoading) return(<p>loading...</p>)
   if (isError)return null
 
@@ -53,10 +57,10 @@ const Navbar = () => {
   <div className="user-section">
     <span>Hello {user.username}</span>
 
-    <button className="logout-top" onClick={handleLogout}>
-      <LogoutIcon />
-      <span className="logout-text">Logout</span>
-    </button>
+   <Button variant="transparent" icon={<LogoutIcon />} iconPosition="left" onClick={handleLogout}>
+            
+            <span >Logout</span>
+          </Button>
   </div>
 )}
       </nav>

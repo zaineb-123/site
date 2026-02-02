@@ -20,7 +20,7 @@ const app = express();
 // Middleware (functions that run on every request)
 app.use(express.json());  // Parses JSON data from requests
 app.use(cookieParser());
-app.use(cors({ origin: ["http://localhost:5173"] , credentials:true}));  // Allows frontend to connect
+app.use(cors({ origin: ["http://localhost:5173"] , credentials:true,allowedHeaders: ["Authorization", "Content-Type"]}));  // Allows frontend to connect
 
 // Routes (URL endpoints)
 app.use("/api/auth", authRoutes);    // All auth routes start with /api/auth
