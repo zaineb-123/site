@@ -1,9 +1,10 @@
 import User from "../models/User.js";
 
+
 //getUsers
 export const getUsers= async (req, res) => {
  
-    const users = await User.find().select("-password");  // Get all users, exclude passwords
+    const users = await User.find().select("-password");
     res.json(users);
   
 };
@@ -45,3 +46,9 @@ export const deleteUser = async (req, res) => {
   const deletedUser = await User.findByIdAndDelete(req.params.id);
   res.json({ success: true, deletedUser });
 };
+
+
+
+
+
+

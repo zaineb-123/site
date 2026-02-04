@@ -1,46 +1,69 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import Login from "./pages/auth/login/Login"
-import Register from "./pages/auth/register/Register"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import AdminDashboard from "./pages/dashboard/AdminDashboard"
-import Adduser from './users/Adduser'
-import Edituser from './users/Edituser'
-import MyProfil from './pages/profil/MyProfil'
-import Dashboardstat from './pages/dashboard/Dashboardstat'
-import UserProfil from './pages/profil/UserProfil'
+import Login from "./pages/auth/login/Login";
+import Register from "./pages/auth/register/Register";
 
-import AdminLayout from "./layout/AdminLayout"
-import UserLayout from "./layout/UserLayout"
+import AdminDashboard from "./pages/dashboard/AdminDashboard";
+import Adduser from "./users/Adduser";
+import Edituser from "./users/Edituser";
+import MyProfil from "./pages/profil/MyProfil";
+import Dashboardstat from "./pages/dashboard/Dashboardstat";
+import UserProfil from "./pages/profil/UserProfil";
 
+import AdminLayout from "./layout/AdminLayout";
+import UserLayout from "./layout/UserLayout";
+import  AddTask  from "./tasks/AddTask";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+import EditTask from "./tasks/EditTask";
+import UserDashboard from "./pages/dashboard/UserDashboard";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-
-
+        {/* route public */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-     
 
-
-        <Route element={<AdminLayout />}>
+        {/* seuls les admins */}
+        <Route
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/add-user" element={<Adduser />} />
           <Route path="/admin-dashboard/edit/:id" element={<Edituser />} />
-          <Route path="/myprofil" element={<MyProfil />} />
           <Route path="/dashboardstat" element={<Dashboardstat />} />
+          <Route path="/myprofil" element={<MyProfil />} />
+          <Route path="/add-task-user/:id" element={<AddTask />} />
+            <Route path="/edit-task-user/:id" element={<EditTask />} />
         </Route>
 
-        <Route element={<UserLayout/>}>
-        <Route path="/myuserprofil" element={<UserProfil />} />
+        {/* User  */}
+        <Route
+          element={
+            <ProtectedRoute>
+              <UserLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/myuserprofil" element={<UserProfil />} />
+          <Route path="/user-dashboard" element={<UserDashboard/>}/>
         </Route>
 
+        {/* redirige auto vers /login */}
+        <Route path="/" element={<Navigate to="/login" />} />
+
+        {/* route inconnues  */}
+        <Route path="*" element={<h1>404 - Page not found</h1>} />
       </Routes>
     </BrowserRouter>
-  )
-}
+  );
+};
 
-export default App
+export default App;

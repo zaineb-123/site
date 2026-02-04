@@ -98,7 +98,7 @@ body {
   margin: 20px auto 50px auto;
   padding: 0;
   box-shadow: 0 10px 30px #3f3068;
-  transform: translateY(40px);
+  transform: translateY(90px);
 }
 
 .table-container .rdt_table {
@@ -154,7 +154,9 @@ body {
 .action-btns .delete:hover {
   color: red;
 }
-
+ .action-btns .add-Task:hover{
+  color: #be31e9;
+ }
 
 .profil-pic {
   width: 40px;
@@ -179,3 +181,4 @@ body {
   background: #eaafc8;
   color: white;
 }
+

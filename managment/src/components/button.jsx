@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import "./Button.css";
 
@@ -9,21 +8,17 @@ const Button = ({
   icon,
   iconPosition = "left",
   onClick,
+  title="",
   type = "button",
   className = "",
-
 }) => {
-  
-  
-
   return (
     <button
+    title={title}
       type={type}
       className={`btn btn-${variant}${className}`}
       onClick={onClick}
       disabled={disabled}
-      
-  
     >
       {icon && children && iconPosition === "left" && (
         <span className="btn__icon btn__icon--left">{icon}</span>
@@ -31,7 +26,7 @@ const Button = ({
 
       {children && <span className="btn__content">{children}</span>}
 
-      {icon && children &&iconPosition === "right" && (
+      {icon && children && iconPosition === "right" && (
         <span className="btn__icon btn__icon--right">{icon}</span>
       )}
 
@@ -41,6 +36,5 @@ const Button = ({
     </button>
   );
 };
-
 
 export default Button;

@@ -1,6 +1,5 @@
-import React from "react"
-import { Outlet } from "react-router-dom"
-import NavbarUser from "../components/Navbar/NavbarUser"
+import { Outlet } from "react-router-dom";
+import NavbarUser from "../components/Navbar/NavbarUser";
 
 const AdminLayout = () => {
   return (
@@ -8,7 +7,7 @@ const AdminLayout = () => {
       <NavbarUser />
       <Outlet />
     </>
-  )
-}
+  );
+};
 
-export default AdminLayout
+export default AdminLayout;

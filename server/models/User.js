@@ -8,8 +8,16 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, default: "user" },  // user or admin
-  refreshToken: { type: String } 
+  refreshToken: { type: String },
+  task:{ 
+  departement:String,
+  task:String,
+  startDate:Date,
+  endDate:Date,
+  status:String,
+   },
 });
+
 
 // Hash password before saving (auto-runs before save)
 userSchema.pre("save", async function () {
@@ -26,4 +34,7 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 
 // Create User model from schema
 const User = mongoose.model("User", userSchema);
+
+
+
 export default User; 
