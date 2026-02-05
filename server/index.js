@@ -3,32 +3,31 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
-import authRoutes from"./routes/auth.js";
-import userRoutes from"./routes/user.js";
-import bodyParser from 'body-parser';
+import authRoutes from "./routes/auth.js";
+import userRoutes from "./routes/user.js";
+import taskRoutes from "./routes/task.js";
 
-
-// Load environment variables from .env file
 dotenv.config();
-
-// Connect to MongoDB database
 connectDB();
 
-// Create Express application
 const app = express();
 
-// Middleware (functions that run on every request)
-app.use(express.json());  // Parses JSON data from requests
+app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: ["http://localhost:5173"] , credentials:true,allowedHeaders: ["Authorization", "Content-Type"]}));  // Allows frontend to connect
+app.use(cors({
+  origin: ["http://localhost:5173"],
+  credentials: true,
+  allowedHeaders: ["Authorization", "Content-Type"]
+}));
 
-// Routes (URL endpoints)
-app.use("/api/auth", authRoutes);    // All auth routes start with /api/auth
-app.use("/api/users", userRoutes);   // All user routes start with /api/users
+// Auth et users
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 
-app.use("/uploads",express.static("uploads"));
+// TASKS : monte **après userRoutes**
+app.use("/api/users/:id/task", taskRoutes);
 
+app.use("/uploads", express.static("uploads"));
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-

@@ -1,0 +1,218 @@
+.status-toggle {
+  display: inline-flex;
+}
+
+.status-toggle-container {
+  display: flex;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 4px;
+  gap: 4px;
+  box-shadow: var(--shadow-sm);
+}
+
+.status-option {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  position: relative;
+}
+
+.status-option:hover:not(.status-option-disabled) {
+  transform: scale(0.9);
+  box-shadow: var(--shadow-sm);
+}
+
+.status-option:focus-visible {
+  box-shadow: 0 0 0 3px rgba(38, 65, 94, 0.2);
+}
+
+.status-option-active {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.status-option-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.status-option-disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.status-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.status-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.2;
+  animation: pulse 2s infinite;
+}
+
+.status-indicator {
+  position: absolute;
+  bottom: 2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Size Variants */
+.status-toggle-sm .status-toggle-container {
+  padding: 3px;
+  gap: 3px;
+}
+
+.status-toggle-sm .status-option {
+  width: 32px;
+  height: 32px;
+}
+
+.status-toggle-sm .status-icon {
+  width: 16px;
+  height: 16px;
+
+}
+
+.status-toggle-sm .status-pulse {
+  width: 20px;
+  height: 20px;
+}
+
+.status-toggle-sm .status-indicator {
+  width: 4px;
+  height: 4px;
+}
+
+.status-toggle-md .status-option {
+  width: 40px;
+  height: 40px;
+}
+
+.status-toggle-lg .status-toggle-container {
+  padding: 6px;
+  gap: 6px;
+}
+
+.status-toggle-lg .status-option {
+  width: 48px;
+  height: 48px;
+}
+
+.status-toggle-lg .status-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.status-toggle-lg .status-pulse {
+  width: 28px;
+  height: 28px;
+}
+
+.status-toggle-lg .status-indicator {
+  width: 8px;
+  height: 8px;
+}
+
+/* Style Variants */
+.status-toggle-pill .status-toggle-container {
+  border-radius: var(--radius-full);
+  padding: 4px;
+}
+
+.status-toggle-pill .status-option {
+  border-radius: var(--radius-full);
+}
+
+.status-toggle-minimal .status-toggle-container {
+  background: transparent;
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+
+.status-toggle-minimal .status-option-active {
+  box-shadow: var(--shadow-sm);
+}
+
+.status-toggle-outline .status-option {
+  border: 2px solid transparent;
+}
+
+.status-toggle-outline .status-option-active {
+  border-color: currentColor;
+  background: transparent;
+  color: currentColor;
+}
+
+.status-toggle-outline .status-option-active .status-pulse {
+  display: none;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .status-toggle-md .status-option {
+    width: 36px;
+    height: 36px;
+  }
+
+  .status-toggle-md .status-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .status-toggle-container {
+    padding: 3px;
+    gap: 3px;
+  }
+
+  .status-option {
+    width: 34px;
+    height: 34px;
+  }
+
+  .status-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+

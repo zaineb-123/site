@@ -18,6 +18,7 @@ import  AddTask  from "./tasks/AddTask";
 import ProtectedRoute from "./components/ProtectedRoute";
 import EditTask from "./tasks/EditTask";
 import UserDashboard from "./pages/dashboard/UserDashboard";
+import TaskDashboard from "./tasks/taskDashboard";
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const App = () => {
           <Route path="/myprofil" element={<MyProfil />} />
           <Route path="/add-task-user/:id" element={<AddTask />} />
             <Route path="/edit-task-user/:id" element={<EditTask />} />
+             <Route path="/task-dashboard/:id" element={<TaskDashboard/>} />
         </Route>
 
         {/* User  */}

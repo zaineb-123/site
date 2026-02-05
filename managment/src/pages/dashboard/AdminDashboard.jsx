@@ -119,6 +119,7 @@ const AdminDashboard = () => {
           columns={columns}
           data={dataactions}
           pagination
+          onRowClicked={(row) => navigate(`/task-dashboard/${row._id}`)}
           highlightOnHover
           striped
         />

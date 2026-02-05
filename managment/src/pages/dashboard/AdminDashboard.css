@@ -36,6 +36,17 @@ body {
   transform: translateY(40px);
 }
 
+
+.dashboard-actionss{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 0 40px;
+  margin-bottom: 30px;
+  align-items: center;
+  transform: translateY(90px);
+}
+
 .search {
   position: relative;
   flex: 1;
@@ -124,10 +135,7 @@ body {
   min-height: 56px;
 }
 
-.table-container .rdt_TableRow:hover {
-  background-color: #fce9f1;
-  cursor: pointer;
-}
+
 
 .table-container .rdt_Pagination {
   border-top: 1px solid #e0e0e0;

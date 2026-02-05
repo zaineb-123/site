@@ -211,58 +211,7 @@ const Edituser = () => {
                       <option value="user">user</option>
                     </select>
                   </div>
-                  <div>
-                    <label className="text">Departement</label>
-                    <select
-                      className="adduser-input"
-                      name="task.departement"
-                      value={users.task.departement||""}
-                      onChange={handleChange}
-                    >
-                      <option value="IT">IT</option>
-                      <option value="Marketing">Marketing</option>
-                      <option value="HR">HR</option>
-                      <option value="Sales">Sales</option>
-                      <option value="Finance">Finance</option>
-                    </select>
-                  </div>
-
-<label className="text">Task</label>
-              <input
-                className="adduser-input"
-                type="text"
-                value={users.task.task||""}
-                onChange={handleChange}
-              
-              />
-
-
-               <div className="task-dates">
-                <div>
-                  <label className="text">Start Date</label>
-                  <input
-                    className="adduser-input"
-                    type="date"
-                    value={users.task.startDate||""}
-                    onChange={handleChange}
-                    name="task.startDate"
-                  />
-                </div>
-                <div>
-                  <label className="text">End Date</label>
-                  <input
-                    className="adduser-input"
-                    type="date"
-                    value={users.task.endDate||""}
-                    onChange={handleChange}
-                     name="task.endDate"
-                  />
-                </div>
-              </div>
-
-
-
-                  <button className="submitt-btn">Edit</button>
+                     <button className="submitt-btn">Edit</button>
                 </form>
                 <Link to="/admin-dashboard">
                   <button className="cancel-btn">Cancel</button>

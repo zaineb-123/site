@@ -14,7 +14,11 @@ const userSchema = new mongoose.Schema({
   task:String,
   startDate:Date,
   endDate:Date,
-  status:String,
+  status:{
+  type: Number,
+  enum: [1, 2, 3], 
+  default: 1
+  }
    },
 });
 

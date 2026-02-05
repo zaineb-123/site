@@ -13,6 +13,7 @@ const AddTask = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
  
+ 
 
 
 
@@ -35,7 +36,7 @@ const AddTask = () => {
     onSuccess: (data) => {
       console.log("Task added successfully:", data);
       queryClient.invalidateQueries(["users"]);
-      navigate("/admin-dashboard");
+      navigate(`/task-dashboard/${id}`);
     },
     onError: (error) => {
       console.error("Failed to add task:", error);
@@ -122,7 +123,7 @@ const AddTask = () => {
                 <button className="task-submit-btn" type="submit">
                   Add Task
                 </button>
-                <Link to="/admin-dashboard">
+                <Link to={`/task-dashboard/${id}`}>
                   <button type="button" className="task-cancel-btn">
                     Cancel
                   </button>
