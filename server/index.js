@@ -1,8 +1,9 @@
-import dotenv from "dotenv";
 import express from "express";
+import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
+
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/user.js";
 import taskRoutes from "./routes/task.js";
@@ -20,12 +21,10 @@ app.use(cors({
   allowedHeaders: ["Authorization", "Content-Type"]
 }));
 
-// Auth et users
+// Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-
-// TASKS : monte **après userRoutes**
-app.use("/api/users/:id/task", taskRoutes);
+app.use("/api/users", userRoutes);          
+app.use("/api/users/:id/task", taskRoutes); 
 
 app.use("/uploads", express.static("uploads"));
 

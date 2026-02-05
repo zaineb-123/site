@@ -9,17 +9,17 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: { type: String, default: "user" },  // user or admin
   refreshToken: { type: String },
-  task:{ 
+  task:[{ 
   departement:String,
   task:String,
   startDate:Date,
   endDate:Date,
   status:{
   type: Number,
-  enum: ["1, 2, 3"], 
+  enum: [1, 2, 3], 
   default: 1
   }
-   },
+   },]
 });
 
 

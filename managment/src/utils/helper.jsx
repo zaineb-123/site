@@ -26,11 +26,11 @@ const daysLeft = (startDate, endDate) => {
   return diffDays >= 0 ? `${diffDays} days` : "Expired";
 };
 
-const updateTaskStatus = async ({ userId, status }) => {
+const updateTaskStatus = async ({ userId, taskId, status }) => {
   const token = localStorage.getItem("token");
 
   const res = await fetch(
-    `http://localhost:4000/api/users/${userId}/task/status`,
+    `http://localhost:4000/api/users/${userId}/task/${taskId}/status`,
     {
       method: "PUT",
       headers: {
@@ -48,42 +48,47 @@ const updateTaskStatus = async ({ userId, status }) => {
   return res.json();
 };
 
+
 export const columns = [
   {
     name: "departement",
-    selector: (row) => row.task?.departement,
+    selector: (row) => row?.departement,
     sortable: true,
   },
   {
     name: "task",
-    selector: (row) => row.task?.task,
+    selector: (row) => row?.task,
   },
   {
     name: "start Date",
-    selector: (row) => formatDate(row.task?.startDate),
+    selector: (row) => formatDate(row?.startDate),
   },
   {
     name: "end Date",
-    selector: (row) => formatDate(row.task?.endDate),
+    selector: (row) => formatDate(row?.endDate),
   },
   {
     name: "days left",
-    selector: (row) => daysLeft(row.task?.startDate, row.task?.endDate),
+    selector: (row) => daysLeft(row?.startDate, row?.endDate),
   },
   {
     name: "task status",
     cell: (row) => {
       // Check if task exists first
-      if (!row.task?.task) return <span>-</span>;
+      if (!row?.task) return <span>-</span>;
 
-      const [localStatus, setLocalStatus] = React.useState(row.task?.status || 1);
+      const [localStatus, setLocalStatus] = React.useState(row?.status || 1);
 
       const handleStatusChange = async (newStatus) => {
         const previousStatus = localStatus;
         setLocalStatus(newStatus);
 
         try {
-          await updateTaskStatus({ userId: row._id, status: newStatus });
+         await updateTaskStatus({
+  userId: row.userId,   
+  taskId: row._id,     
+  status: newStatus
+});
         } catch (err) {
           console.error("Status update failed", err);
           setLocalStatus(previousStatus);

@@ -1,6 +1,8 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+// Formater les dates
 const formatDate = (date) => {
   if (!date) return "-";
   const d = new Date(date);
@@ -8,91 +10,34 @@ const formatDate = (date) => {
   return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getDate()).padStart(2, "0")}`;
 };
 
+// Calculer les jours restants
 const daysLeft = (endDate) => {
   if (!endDate) return "-";
   const today = new Date();
   const end = new Date(endDate);
   if (isNaN(end)) return "-";
-  
   const diffDays = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
   return diffDays >= 0 ? `${diffDays} days` : "Expired";
 };
 
-export const columns = [
-  {
-    name: "Departement",
-    selector: (row) => row.task?.departement || "-",
-    sortable: true,
-  },
-  {
-    name: "Task",
-    selector: (row) => row.task?.task || "-",
-  },
-  {
-    name: "Start Date",
-    selector: (row) => formatDate(row.task?.startDate),
-  },
-  {
-    name: "End Date",
-    selector: (row) => formatDate(row.task?.endDate),
-  },
-  {
-    name: "Days Left",
-    selector: (row) => daysLeft(row.task?.endDate), // Fixed: only pass endDate
-  },
-  {
-    name: "Status",
-    selector: (row) => row.task?.status,
-    sortable: true,
-    cell: (row) => {
-    
-      if (!row.task.task) return <span>-</span>;
-
-      let statusText = "Not Started";
-      switch (row.task.status) {
-        case 1:
-          statusText = "Not Started";
-          break;
-        case 2:
-          statusText = "In Progress";
-          break;
-        case 3:
-          statusText = "Completed";
-          break;
-        default:
-          statusText = "Not Started";
-      }
-      
-      return <span className={`status-badge status-${row.task.status}`}>{statusText}</span>;
-    },
-  },
-  {
-  name: "Action",
-  cell: (row) => {
-
-    if (!row.task?.task) return <span>-</span>;
-    return <UserButtons user={row} />;
-  },
-}
-];
-
-export const UserButtons = ({ user }) => {
+// Composant des boutons d'action
+export const UserButtons = ({ task, userId }) => {
   const navigate = useNavigate();
 
-  const handleEdit = (id) => {
-    navigate(`/edit-task-user/${id}`);
+  const handleEdit = () => {
+    navigate(`/edit-task-user/${userId}/${task._id}`);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this task?")) return;
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:4000/api/users/${id}/task`, {
+      await axios.delete(`http://localhost:4000/api/users/${userId}/task/${task._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("Task deleted successfully");
-      navigate(0); 
+      window.location.reload(); // recharge la page après suppression
     } catch (err) {
       console.error(err);
       alert(err.response?.data?.error || "Error deleting task");
@@ -104,7 +49,7 @@ export const UserButtons = ({ user }) => {
       <svg
         onClick={(e) => {
           e.stopPropagation();
-          handleEdit(user._id);
+          handleEdit();
         }}
         className="edit"
         xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +65,7 @@ export const UserButtons = ({ user }) => {
         className="delete"
         onClick={(e) => {
           e.stopPropagation();
-          handleDelete(user._id);
+          handleDelete();
         }}
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -133,3 +78,64 @@ export const UserButtons = ({ user }) => {
     </div>
   );
 };
+
+// Colonnes du tableau
+export const columns = [
+  {
+    name: "Departement",
+    selector: (row) => row?.departement || "-",
+    sortable: true,
+  },
+  {
+    name: "Task",
+    selector: (row) => row?.task || "-",
+  },
+  {
+    name: "Start Date",
+    selector: (row) => formatDate(row?.startDate),
+  },
+  {
+    name: "End Date",
+    selector: (row) => formatDate(row?.endDate),
+  },
+  {
+    name: "Days Left",
+    selector: (row) => daysLeft(row?.endDate),
+  },
+  {
+    name: "Status",
+    selector: (row) => row?.status ?? "-",
+    sortable: true,
+    cell: (row) => {
+      if (!row.task) return <span>-</span>;
+
+      let statusText = "Not Started";
+      switch (row.status) {
+        case 1:
+          statusText = "Not Started";
+          break;
+        case 2:
+          statusText = "In Progress";
+          break;
+        case 3:
+          statusText = "Completed";
+          break;
+        default:
+          statusText = "Not Started";
+      }
+
+      return (
+        <span className={`status-badge status-${row.status}`}>
+          {statusText}
+        </span>
+      );
+    },
+  },
+  {
+    name: "Action",
+    cell: (row) => {
+      if (!row.task) return <span>-</span>;
+      return <UserButtons task={row} userId={row.userId} />;
+    },
+  },
+];

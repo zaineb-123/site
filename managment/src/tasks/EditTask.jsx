@@ -4,7 +4,7 @@ import axios from "axios";
 import "./AddTask.css"
 
 const EditTask = () => {
-  const { id } = useParams();
+const { id, taskId } = useParams();
   const navigate = useNavigate();
 
   const [userLoading, setUserLoading] = useState(false);
@@ -15,32 +15,34 @@ const EditTask = () => {
     endDate: "",
   });
 
-  useEffect(() => {
-    const fetchTask = async () => {
-      setUserLoading(true);
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(`http://localhost:4000/api/users/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (res.data && res.data.task) {
-          const { departement, task, startDate, endDate } = res.data.task;
-          setTaskData({
-            departement: departement || "",
-            task: task || "",
-            startDate: startDate ? startDate.slice(0, 10) : "",
-            endDate: endDate ? endDate.slice(0, 10) : "",
-          });
-        }
-      } catch (err) {
-        alert("Erreur lors de la récupération de la tâche");
-      } finally {
-        setUserLoading(false);
-      }
-    };
+ 
 
-    fetchTask();
-  }, [id]);
+useEffect(() => {
+  const fetchTask = async () => {
+    setUserLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(
+        `http://localhost:4000/api/users/${id}/task/${taskId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setTaskData({
+        departement: res.data.departement || "",
+        task: res.data.task || "",
+        startDate: res.data.startDate || "",
+        endDate: res.data.endDate || "",
+      });
+    } catch (err) {
+      alert("Task not found");
+    } finally {
+      setUserLoading(false);
+    }
+  };
+
+  fetchTask();
+}, [id, taskId]);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,10 +54,10 @@ const EditTask = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:4000/api/users/${id}/task`,
-        taskData,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  `http://localhost:4000/api/users/${id}/task/${taskId}`,
+  taskData,
+  { headers: { Authorization: `Bearer ${token}` } }
+);
       navigate(`/task-dashboard/${id}`);
     } catch (err) {
       alert(err.response?.data?.error || "Erreur lors de la mise à jour de la tâche");
