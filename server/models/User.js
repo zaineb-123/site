@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   endDate:Date,
   status:{
   type: Number,
-  enum: [1, 2, 3], 
+  enum: ["1, 2, 3"], 
   default: 1
   }
    },
