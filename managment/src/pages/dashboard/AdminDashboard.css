@@ -189,4 +189,31 @@ body {
   background: #eaafc8;
   color: white;
 }
+.status-badge.status-1{
+  background: #2a2726;
+  color: white;
 
+}
+
+
+
+.status-badge.status-2{
+  background: #e48a52;
+  color: white;
+
+}
+
+
+.status-badge.status-3{
+  background: #2c9b32;
+  color: white;
+
+}
+.status-badge {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #2a2726;
+  color: white;
+}

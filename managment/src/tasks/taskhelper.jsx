@@ -8,9 +8,10 @@ const formatDate = (date) => {
   return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getDate()).padStart(2, "0")}`;
 };
 
-const daysLeft = (startDate, endDate) => {
-  if (!startDate || !endDate) return "-";
-  const diffDays = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
+const daysLeft = (endDate) => {
+  if (!endDate) return "-";
+  const today = new Date();
+  const diffDays = Math.ceil((new Date(endDate) - today) / (1000 * 60 * 60 * 24));
   return diffDays >= 0 ? `${diffDays} days` : "Expired";
 };
 
@@ -26,15 +27,15 @@ export const columns = [
   },
   {
     name: "Start Date",
-    selector: (row) => formatDate(row.task?.startDate),
+    selector: (row) => formatDate(row.task?.startDate)|| "-",
   },
   {
     name: "End Date",
-    selector: (row) => formatDate(row.task?.endDate),
+    selector: (row) => formatDate(row.task?.endDate)|| "-",
   },
   {
     name: "Days Left",
-    selector: (row) => daysLeft(row.task?.startDate, row.task?.endDate),
+    selector: (row) => daysLeft(row.task?.startDate, row.task?.endDate)|| "-",
   },
 
   {
@@ -51,18 +52,22 @@ export const columns = [
         statusText = "In Progress";
         break;
       case 3:
-        statusText = "Complete";
+        statusText = "Completed";
         break;
       default:
-        statusText = "Unknown";
+        statusText = "Not Started";
     }
-    return <span className={`role-badge status-${row.task?.status}`}>{statusText}</span>;
+    return <span className={`status-badge status-${row.task?.status}`}>{statusText}</span>;
   },
   },
   {
     name: "Action",
     cell: (row) => <UserButtons user={row} />,
   },
+
+
+
+
 ];
 
 export const UserButtons = ({ user }) => {
@@ -81,8 +86,8 @@ export const UserButtons = ({ user }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("Task deleted successfully");
-      // Optionnel : reload la page ou redirige
-      navigate(0); // rafraîchit la page
+    
+      navigate(0); 
     } catch (err) {
       console.error(err);
       alert(err.response?.data?.error || "Error deleting task");
