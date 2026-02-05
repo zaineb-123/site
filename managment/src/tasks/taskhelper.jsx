@@ -11,7 +11,10 @@ const formatDate = (date) => {
 const daysLeft = (endDate) => {
   if (!endDate) return "-";
   const today = new Date();
-  const diffDays = Math.ceil((new Date(endDate) - today) / (1000 * 60 * 60 * 24));
+  const end = new Date(endDate);
+  if (isNaN(end)) return "-";
+  
+  const diffDays = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
   return diffDays >= 0 ? `${diffDays} days` : "Expired";
 };
 
@@ -27,47 +30,50 @@ export const columns = [
   },
   {
     name: "Start Date",
-    selector: (row) => formatDate(row.task?.startDate)|| "-",
+    selector: (row) => formatDate(row.task?.startDate),
   },
   {
     name: "End Date",
-    selector: (row) => formatDate(row.task?.endDate)|| "-",
+    selector: (row) => formatDate(row.task?.endDate),
   },
   {
     name: "Days Left",
-    selector: (row) => daysLeft(row.task?.startDate, row.task?.endDate)|| "-",
+    selector: (row) => daysLeft(row.task?.endDate), // Fixed: only pass endDate
   },
-
   {
-    name:"Status",
-    selector: (row)=> row.task?.status,
+    name: "Status",
+    selector: (row) => row.task?.status,
     sortable: true,
     cell: (row) => {
-    let statusText = "-";
-    switch (row.task?.status) {
-      case 1:
-        statusText = "Not Started";
-        break;
-      case 2:
-        statusText = "In Progress";
-        break;
-      case 3:
-        statusText = "Completed";
-        break;
-      default:
-        statusText = "Not Started";
-    }
-    return <span className={`status-badge status-${row.task?.status}`}>{statusText}</span>;
-  },
+    
+      if (!row.task.task) return <span>-</span>;
+
+      let statusText = "Not Started";
+      switch (row.task.status) {
+        case 1:
+          statusText = "Not Started";
+          break;
+        case 2:
+          statusText = "In Progress";
+          break;
+        case 3:
+          statusText = "Completed";
+          break;
+        default:
+          statusText = "Not Started";
+      }
+      
+      return <span className={`status-badge status-${row.task.status}`}>{statusText}</span>;
+    },
   },
   {
-    name: "Action",
-    cell: (row) => <UserButtons user={row} />,
+  name: "Action",
+  cell: (row) => {
+
+    if (!row.task?.task) return <span>-</span>;
+    return <UserButtons user={row} />;
   },
-
-
-
-
+}
 ];
 
 export const UserButtons = ({ user }) => {
@@ -86,7 +92,6 @@ export const UserButtons = ({ user }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("Task deleted successfully");
-    
       navigate(0); 
     } catch (err) {
       console.error(err);

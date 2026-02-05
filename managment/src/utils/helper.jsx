@@ -2,8 +2,6 @@ import React from 'react'
 import Switch from "@mui/material/Switch";
 import StatusToggle from '../components/StatusToggle';
 
-
-
 const formatDate = (date) => {
   if (!date) return "-";
   const d = new Date(date);
@@ -13,6 +11,7 @@ const formatDate = (date) => {
   const day = String(d.getDate()).padStart(2, "0");
   return `${year}/${month}/${day}`;
 };
+
 const daysLeft = (startDate, endDate) => {
   if (!startDate || !endDate) return "-";
 
@@ -21,17 +20,15 @@ const daysLeft = (startDate, endDate) => {
 
   if (isNaN(start) || isNaN(end)) return "-";
 
-  const diffTime = end - start; // en millisecondes
+  const diffTime = end - start;
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
   return diffDays >= 0 ? `${diffDays} days` : "Expired";
 };
 
- const updateTaskStatus = async ({ userId, status }) => {
+const updateTaskStatus = async ({ userId, status }) => {
   const token = localStorage.getItem("token");
 
-  // Convert status number to the format expected by backend
-  // Status is already 1, 2, or 3 from StatusToggle, so just send it directly
   const res = await fetch(
     `http://localhost:4000/api/users/${userId}/task/status`,
     {
@@ -40,7 +37,7 @@ const daysLeft = (startDate, endDate) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ status }), // Send the number directly
+      body: JSON.stringify({ status }),
     }
   );
 
@@ -51,38 +48,34 @@ const daysLeft = (startDate, endDate) => {
   return res.json();
 };
 
-export const columns=[
-    {
+export const columns = [
+  {
     name: "departement",
     selector: (row) => row.task?.departement,
     sortable: true,
   },
-
   {
     name: "task",
     selector: (row) => row.task?.task,
   },
-
-  
-
   {
-    name:"start Date",
-    selector:(row)=>formatDate(row.task?.startDate),
+    name: "start Date",
+    selector: (row) => formatDate(row.task?.startDate),
   },
-
   {
-    name:"end Date",
-    selector:(row)=>formatDate(row.task?.endDate),
+    name: "end Date",
+    selector: (row) => formatDate(row.task?.endDate),
   },
-
-
   {
-    name:"days left",
-    selector:(row)=>daysLeft(row.task?.startDate, row.task?.endDate),
+    name: "days left",
+    selector: (row) => daysLeft(row.task?.startDate, row.task?.endDate),
   },
-{
+  {
     name: "task status",
     cell: (row) => {
+      // Check if task exists first
+      if (!row.task?.task) return <span>-</span>;
+
       const [localStatus, setLocalStatus] = React.useState(row.task?.status || 1);
 
       const handleStatusChange = async (newStatus) => {
@@ -90,7 +83,6 @@ export const columns=[
         setLocalStatus(newStatus);
 
         try {
-          // Send the number directly (1, 2, or 3)
           await updateTaskStatus({ userId: row._id, status: newStatus });
         } catch (err) {
           console.error("Status update failed", err);
