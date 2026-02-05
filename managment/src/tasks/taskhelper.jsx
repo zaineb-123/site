@@ -41,9 +41,23 @@ export const columns = [
     name:"Status",
     selector: (row)=> row.task?.status,
     sortable: true,
-    cell:(row)=>(
-      <span className={`role-badge ${row.task?.status}`}>{row?.task.status}</span>
-    )
+    cell: (row) => {
+    let statusText = "-";
+    switch (row.task?.status) {
+      case 1:
+        statusText = "Not Started";
+        break;
+      case 2:
+        statusText = "In Progress";
+        break;
+      case 3:
+        statusText = "Complete";
+        break;
+      default:
+        statusText = "Unknown";
+    }
+    return <span className={`role-badge status-${row.task?.status}`}>{statusText}</span>;
+  },
   },
   {
     name: "Action",
