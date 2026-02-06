@@ -22,6 +22,7 @@ const Adduser = () => {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("admin");
   const [profil, setProfil] = useState("");
+  const [departement, setDepartement] = useState("IT");
   const navigate = useNavigate();
 
   const addMutation = useMutation({
@@ -45,6 +46,7 @@ const Adduser = () => {
     formData.append("password", password);
     formData.append("role", role);
     formData.append("profil", profil);
+    formData.append("departement",departement);
 
     addMutation.mutate(formData);
   };
@@ -126,6 +128,23 @@ const Adduser = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={addMutation.isPending}
                   />
+                </div>
+                <div>
+                  <label className="text" >
+                    departement
+                  </label>
+                 <select
+                    className="adduser-input"
+                    name="departement"
+                    onChange={(e) => setDepartement(e.target.value)}
+                    disabled={addMutation.isPending}
+                  >
+                   <option value="">--Sélectionnez un département--</option>
+    <option value="IT">IT</option>
+    <option value="HR">Ressources Humaines</option>
+    <option value="Marketing">Marketing</option>
+    <option value="Finance">Finance</option>
+                  </select>
                 </div>
 
                 <div>

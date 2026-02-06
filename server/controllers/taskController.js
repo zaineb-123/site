@@ -3,7 +3,7 @@ import User from "../models/User.js";
 export const addTask = async (req, res) => {
   try {
     const { id } = req.params;
-    const { departement, task, startDate, endDate, status } = req.body;
+    const { task, startDate, endDate, status } = req.body;
 
     console.log("Received data:", req.body); 
 
@@ -11,7 +11,7 @@ export const addTask = async (req, res) => {
     if (!user) return res.status(404).json({ message: "User not found" });
 
   
-    user.task.push({ departement, task, startDate, endDate, status });
+    user.task.push({  task, startDate, endDate, status });
     await user.save();
 
 
@@ -20,7 +20,6 @@ export const addTask = async (req, res) => {
 
     const formattedTask = {
       _id: newTask._id,
-      departement: newTask.departement,
       task: newTask.task,
       startDate: newTask.startDate ? newTask.startDate.toISOString().slice(0, 10) : "",
       endDate: newTask.endDate ? newTask.endDate.toISOString().slice(0, 10) : "",
@@ -38,8 +37,8 @@ export const addTask = async (req, res) => {
 };
 export const editTask = async (req, res) => {
   try {
-    const { id, taskId } = req.params; // taskId from URL
-    const { departement, task, startDate, endDate, status } = req.body;
+    const { id, taskId } = req.params;
+    const { task, startDate, endDate, status } = req.body;
 
     const user = await User.findById(id);
     if (!user) return res.status(404).json({ message: "User not found" });
@@ -51,7 +50,6 @@ export const editTask = async (req, res) => {
 
     user.task[taskIndex] = {
       ...user.task[taskIndex].toObject(),
-      departement,
       task,
       startDate,
       endDate,
@@ -77,7 +75,7 @@ export const editTask = async (req, res) => {
 
 export const deleteTask = async (req, res) => {
   try {
-    const { id, taskId } = req.params; // taskId from URL
+    const { id, taskId } = req.params; 
 
     const user = await User.findById(id);
     if (!user) return res.status(404).json({ message: "User not found" });
@@ -99,7 +97,7 @@ export const deleteTask = async (req, res) => {
 
 export const updateStatus = async (req, res) => {
   try {
-    const { id, taskId } = req.params; // taskId from URL
+    const { id, taskId } = req.params; 
     const { status } = req.body;
 
     if (![1, 2, 3].includes(status)) {
@@ -134,8 +132,7 @@ export const getTasks = async (req, res) => {
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const tasks = user.task.map(t => ({
-      _id: t._id.toString(), // important !
-      departement: t.departement,
+      _id: t._id.toString(), 
       task: t.task,
       startDate: t.startDate ? t.startDate.toISOString().slice(0, 10) : "",
       endDate: t.endDate ? t.endDate.toISOString().slice(0, 10) : "",
@@ -167,10 +164,37 @@ export const getMyTasks = async (req, res) => {
     }));
 
     res.status(200).json({
-      userId: user._id.toString(), // ✅ AJOUT IMPORTANT
+      userId: user._id.toString(), 
       tasks
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+// GET all tasks of all users (for admin)
+export const getAllTasks = async (req, res) => {
+  try {
+    const users = await User.find().select("username departement task"); // récupère username, departement et tasks
+
+    const allTasks = [];
+
+    users.forEach((user) => {
+      user.task.forEach((t) => {
+        allTasks.push({
+          _id: t._id.toString(),
+          username: user.username,
+          departement: user.departement,
+          task: t.task,
+          startDate: t.startDate ? t.startDate.toISOString().slice(0, 10) : "",
+          endDate: t.endDate ? t.endDate.toISOString().slice(0, 10) : "",
+          status: t.status,
+        });
+      });
+    });
+
+    res.status(200).json({ tasks: allTasks });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
 };

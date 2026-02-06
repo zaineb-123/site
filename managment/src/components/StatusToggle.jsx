@@ -8,6 +8,7 @@ const StatusToggle = ({
   className = "",
   size = "md",
   showTooltip = true,
+  
 }) => {
   const options = [
     {

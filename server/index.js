@@ -7,6 +7,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/user.js";
 import taskRoutes from "./routes/task.js";
+import adminTaskRoutes from "./routes/task.js";
 
 dotenv.config();
 connectDB();
@@ -25,6 +26,7 @@ app.use(cors({
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);          
 app.use("/api/users/:id/task", taskRoutes); 
+app.use("/api/admin/tasks", adminTaskRoutes);
 
 app.use("/uploads", express.static("uploads"));
 

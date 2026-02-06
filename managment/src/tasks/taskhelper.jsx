@@ -37,7 +37,7 @@ export const UserButtons = ({ task, userId }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("Task deleted successfully");
-      window.location.reload(); // recharge la page après suppression
+      window.location.reload(); 
     } catch (err) {
       console.error(err);
       alert(err.response?.data?.error || "Error deleting task");
@@ -79,7 +79,7 @@ export const UserButtons = ({ task, userId }) => {
   );
 };
 
-// Colonnes du tableau
+
 export const columns = [
   {
     name: "Departement",

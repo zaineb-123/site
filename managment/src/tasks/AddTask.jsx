@@ -8,7 +8,7 @@ const AddTask = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [departement, setDepartement] = useState("");
+
   const [task, setTask] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -48,7 +48,7 @@ const AddTask = () => {
     e.preventDefault();
 
     const taskData = {
-      departement,
+
       task,
       startDate,
       endDate,
@@ -73,20 +73,6 @@ const AddTask = () => {
           <div className="task-form-box">
             <h2 className="task-form-title">Task Details</h2>
             <form className="task-form" onSubmit={handleSubmit}>
-              <label>Departement</label>
-              <select
-                className="task-input"
-                value={departement}
-                onChange={(e) => setDepartement(e.target.value)}
-                required
-              >
-                <option value="">Select departement</option>
-                <option value="IT">IT</option>
-                <option value="Marketing">Marketing</option>
-                <option value="HR">HR</option>
-                <option value="Sales">Sales</option>
-                <option value="Finance">Finance</option>
-              </select>
 
               <label>Task</label>
               <input

@@ -1,8 +1,7 @@
-import React from 'react'
-import Switch from "@mui/material/Switch";
-import StatusToggle from '../components/StatusToggle';
+import React from "react";
+import StatusToggle from "../components/StatusToggle";
 
-const formatDate = (date) => {
+export const formatDate = (date) => {
   if (!date) return "-";
   const d = new Date(date);
   if (isNaN(d)) return "-";
@@ -12,44 +11,17 @@ const formatDate = (date) => {
   return `${year}/${month}/${day}`;
 };
 
-const daysLeft = (startDate, endDate) => {
-  if (!startDate || !endDate) return "-";
-
-  const start = new Date(startDate);
+const daysLeft = (endDate) => {
+  if (!endDate) return "-";
+  const today = new Date();
   const end = new Date(endDate);
-
-  if (isNaN(start) || isNaN(end)) return "-";
-
-  const diffTime = end - start;
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
+  if (isNaN(end)) return "-";
+  const diffDays = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
   return diffDays >= 0 ? `${diffDays} days` : "Expired";
 };
 
-const updateTaskStatus = async ({ userId, taskId, status }) => {
-  const token = localStorage.getItem("token");
 
-  const res = await fetch(
-    `http://localhost:4000/api/users/${userId}/task/${taskId}/status`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ status }),
-    }
-  );
-
-  if (!res.ok) {
-    throw new Error("Failed to update status");
-  }
-
-  return res.json();
-};
-
-
-export const columns = [
+export const getColumns = (handleStatusChange) => [
   {
     name: "departement",
     selector: (row) => row?.departement,
@@ -69,41 +41,22 @@ export const columns = [
   },
   {
     name: "days left",
-    selector: (row) => daysLeft(row?.startDate, row?.endDate),
+      selector: (row) => daysLeft(row?.endDate),
   },
   {
     name: "task status",
     cell: (row) => {
-      // Check if task exists first
       if (!row?.task) return <span>-</span>;
-
-      const [localStatus, setLocalStatus] = React.useState(row?.status || 1);
-
-      const handleStatusChange = async (newStatus) => {
-        const previousStatus = localStatus;
-        setLocalStatus(newStatus);
-
-        try {
-         await updateTaskStatus({
-  userId: row.userId,   
-  taskId: row._id,     
-  status: newStatus
-});
-        } catch (err) {
-          console.error("Status update failed", err);
-          setLocalStatus(previousStatus);
-        }
-      };
 
       return (
         <StatusToggle
-          value={localStatus}
+          value={row.status}
           variant="pill"
           size="sm"
           showTooltip
-          onChange={handleStatusChange}
+          onChange={(newStatus) => handleStatusChange(row._id, newStatus)}
         />
       );
     },
-  }
+  },
 ];

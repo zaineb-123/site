@@ -9,7 +9,6 @@ const { id, taskId } = useParams();
 
   const [userLoading, setUserLoading] = useState(false);
   const [taskData, setTaskData] = useState({
-    departement: "",
     task: "",
     startDate: "",
     endDate: "",
@@ -28,7 +27,6 @@ useEffect(() => {
       );
 
       setTaskData({
-        departement: res.data.departement || "",
         task: res.data.task || "",
         startDate: res.data.startDate || "",
         endDate: res.data.endDate || "",
@@ -80,21 +78,7 @@ useEffect(() => {
           <div className="task-form-box">
             <h2 className="task-form-title">Task Details</h2>
             <form className="task-form" onSubmit={handleSubmit}>
-              <label>Departement</label>
-              <select
-                className="task-input"
-                name="departement"
-                value={taskData.departement}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select departement</option>
-                <option value="IT">IT</option>
-                <option value="Marketing">Marketing</option>
-                <option value="HR">HR</option>
-                <option value="Sales">Sales</option>
-                <option value="Finance">Finance</option>
-              </select>
+             
 
               <label>Task</label>
               <input

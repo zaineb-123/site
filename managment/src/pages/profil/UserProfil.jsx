@@ -45,6 +45,7 @@ const MyProfile = () => {
         email: data.email || "",
         role: data.role || "",
         profil: data.profil || "",
+        departement:data.departement||"",
       }),
   });
 
@@ -63,6 +64,7 @@ const MyProfile = () => {
       email: user.email,
       role: user.role,
       profil: user.profil,
+ 
     });
   };
 
@@ -73,6 +75,7 @@ const MyProfile = () => {
       email: user.email,
       role: user.role,
       profil: user.profil,
+      departement:user.departement,
     });
   };
 
@@ -169,6 +172,13 @@ const MyProfile = () => {
               <div className="readonly">{user?.email}</div>
             )}
           </div>
+          <div className="form-group">
+            <label>Departement</label>
+            
+              <div className="readonly">{user?.departement}</div>
+          
+          </div>
+
 
           <div className="form-actions">
             {!isEditing ? (

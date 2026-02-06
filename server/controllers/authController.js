@@ -78,13 +78,13 @@ export const refreshToken= async (req, res,next) => {
 //add
 
 export const addUser = async (req, res) => {
-  const { username, email, password, role } = req.body;
+  const { username, email, password, role, departement } = req.body;
   const profil = req.file ? req.file.path : null;
 
   let user = await User.findOne({ email });
   if (user) return res.status(400).json({ msg: "User already exists" });
 
-  user = new User({ username, email, password, role, profil });
+  user = new User({ username, email, password, role, profil,departement });
   await user.save();
 
   const token = generateAccessToken(user._id, user.role);
@@ -95,5 +95,5 @@ export const addUser = async (req, res) => {
   user.refreshToken = refreshToken;
   await user.save();
 
-  res.json({ token, email, password, role, profil });
+  res.json({ token, email, password, role, profil,departement });
 };

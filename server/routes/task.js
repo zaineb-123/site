@@ -1,6 +1,6 @@
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
-import { addTask, editTask, deleteTask, updateStatus, getTasks,getMyTasks } from "../controllers/taskController.js";
+import { addTask, editTask, deleteTask, updateStatus, getTasks,getMyTasks,getAllTasks } from "../controllers/taskController.js";
 import User from "../models/User.js";
 
 const router = express.Router({ mergeParams: true }); 
@@ -20,7 +20,6 @@ router.get("/:taskId", async (req, res) => {
 
     res.status(200).json({
       _id: task._id.toString(),
-      departement: task.departement,
       task: task.task,
       startDate: task.startDate ? task.startDate.toISOString().slice(0, 10) : "",
       endDate: task.endDate ? task.endDate.toISOString().slice(0, 10) : "",
@@ -33,6 +32,8 @@ router.get("/:taskId", async (req, res) => {
 
 router.delete("/:taskId", deleteTask);        
 router.put("/:taskId/status", updateStatus); 
+router.get("/tasks/all", getAllTasks); 
+router.get("/all", getAllTasks);
 
 
 

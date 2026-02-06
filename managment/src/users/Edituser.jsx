@@ -15,12 +15,7 @@ const Edituser = () => {
     password: "",
     role: "",
     profil: "",
-    task: {
-      departement: "",
-      task: "",
-      startDate: "",
-      endDate: "",
-    },
+    departement:"",
   });
 
  useEffect(() => {
@@ -85,7 +80,7 @@ const Edituser = () => {
       formData.append("username", users.username);
       formData.append("email", users.email);
       formData.append("role", users.role);
-      formData.append("departement", users.task.departement);
+      formData.append("departement", users.departement);
       formData.append("task", users.task.task);
       formData.append("startDate", users.task.startDate);
       formData.append("endDate", users.task.endDate);
@@ -109,12 +104,10 @@ const Edituser = () => {
           email: response.data.email,
           role: response.data.role,
           profil: response.data.profil,
-          task: {
-            departement: response.data.task.departement,
-            task: response.data.task.task,
-            startDate: response.data.task.startDate,
-            endDate: response.data.task.endDate,
-          },
+          
+            departement: response.data.departement,
+            
+     
         });
         navigate("/admin-dashboard");
       }
@@ -128,8 +121,8 @@ const Edituser = () => {
       {userLoading ? (
         <div>Loading...</div>
       ) : (
-        <div className="adduser-container page-animate">
-          <div className="adduser-wrapper">
+        <div className="edituser-container page-animate">
+          <div className="edituser-wrapper">
             <div className="adduser-desc">
               <div className="icon">
                 <svg
@@ -209,6 +202,22 @@ const Edituser = () => {
                     >
                       <option value="admin">admin</option>
                       <option value="user">user</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text" >
+                      departement
+                    </label>
+                    <select
+                      className="adduser-input"
+                      name="departement"
+                      value={users.departement||""}
+                      onChange={handleChange}
+                    >
+                      <option value="It">IT</option>
+                      <option value="RH">HR</option>
+                      <option value="Marketing">Marketing</option>
+
                     </select>
                   </div>
                      <button className="submitt-btn">Edit</button>

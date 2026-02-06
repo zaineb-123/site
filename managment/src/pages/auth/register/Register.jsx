@@ -5,11 +5,15 @@ import { register } from '../../../services/auth/register'
 import './Register.css'
 import Button from '../../../components/Button'
 
+
+import { validateEmail,validatePassword,validateUsername } from '../../../validation/AuthValidation'
+
 const Register = () => {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [role, setRole] = useState("admin")
+    const [role, setRole] = useState("user")
+    const [errors,setErrors]=useState({username:"",email:"",password:"",server:""})
     const navigate = useNavigate()
     
     const registerMutation = useMutation({
@@ -23,12 +27,20 @@ const Register = () => {
         
         onError: (error) => {
             console.error('Registration failed:', error)
-            alert(error.response?.data?.msg || "Registration failed")
+            setErrors(prev => ({ ...prev, server: error.response?.data?.msg || "Registration failed" }))
         }
     })
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        const usernameError=validateUsername(username)
+        const emailError= validateEmail(email)
+        const passwordError=validatePassword(password)
+
+
+
+        setErrors({username:usernameError,email:emailError,password:passwordError,server:""})
+        if (usernameError|| emailError|| passwordError)return
         registerMutation.mutate({ email, password, username, role })
     }
 
@@ -55,33 +67,25 @@ const Register = () => {
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
                                     disabled={registerMutation.isPending}
-                                    required
+                                    
                                 />
+                                {errors.username && <p className='error-text'>{errors.username}</p>}
                             </div>
 
                             <div>
                                 <input 
-                                    type="email"
+                                    
                                     className='register-input'
                                     placeholder='your email'
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     disabled={registerMutation.isPending}
-                                    required
+                                    
                                 />
+                                {errors.email && <p className='error-text'>{errors.email}</p>}
                             </div>
 
-                            <div className='select-wrapper'>
-                                <select 
-                                    className='register-select'
-                                    value={role}
-                                    onChange={(e) => setRole(e.target.value)}
-                                    disabled={registerMutation.isPending}
-                                >
-                                    <option value="admin">admin</option>
-                                    <option value="user">user</option>
-                                </select>
-                            </div>
+                            
 
                             <div>
                                 <input 
@@ -91,9 +95,12 @@ const Register = () => {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     disabled={registerMutation.isPending}
-                                    required
+                                    
                                 />
+                                {errors.password && <p className='error-text'>{errors.password}</p>}
                             </div>
+                           
+
 
                             {registerMutation.isError && (
                                 <div className='error-message'>

@@ -4,10 +4,12 @@ import { useMutation } from "@tanstack/react-query";
 import "./Login.css";
 import { login } from "../../../services/auth/login";
 import Button from "../../../components/Button";
+import { validateEmail,validatePassword } from '../../../validation/AuthValidation'
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors,setErrors]=useState({username:"",email:"",password:"",server:""})
   const navigate = useNavigate();
 
   const loginMutation = useMutation({
@@ -26,6 +28,14 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+            const emailError= validateEmail(email)
+            const passwordError=validatePassword(password)
+    
+    
+    
+            setErrors({email:emailError,password:passwordError,server:""})
+            if ( emailError|| passwordError)return
     loginMutation.mutate({ email, password });
   };
 
@@ -47,26 +57,28 @@ const Login = () => {
               <div>
                 <label className="text">Email</label>
                 <input
-                  type="email"
+                 
                   className="login-input"
                   placeholder="Enter Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loginMutation.isPending}
-                  required
+                
                 />
+                 {errors.email && <p className='error-text'>{errors.email}</p>}
               </div>
               <div>
                 <label className="text">Password</label>
                 <input
                   type="password"
                   className="login-input"
-                  placeholder="*****"
+                  placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loginMutation.isPending}
-                  required
+                 
                 />
+                 {errors.password && <p className='error-text'>{errors.password}</p>}
               </div>
 
               {loginMutation.isError && (

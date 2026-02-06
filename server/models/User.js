@@ -9,8 +9,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: { type: String, default: "user" },  // user or admin
   refreshToken: { type: String },
+  departement:{type:String},
   task:[{ 
-  departement:String,
   task:String,
   startDate:Date,
   endDate:Date,

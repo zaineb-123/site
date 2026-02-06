@@ -38,7 +38,7 @@ export const columns = [
 
   {
     name: "departement",
-    selector: (row) => row.task?.departement,
+    selector: (row) => row?.departement,
     sortable: true,
   },
 

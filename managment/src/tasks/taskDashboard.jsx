@@ -5,7 +5,6 @@ import DataTable from "react-data-table-component";
 import { columns } from "./taskhelper";
 import AddTaskIcon from "../components/icons/AddTaskIcon";
 
-// Fetch des tâches de l'utilisateur
 const fetchUserById = async (id) => {
   const token = localStorage.getItem("token");
   const res = await fetch(`http://localhost:4000/api/users/${id}/task`, {
@@ -14,6 +13,18 @@ const fetchUserById = async (id) => {
   if (!res.ok) throw new Error("Failed to fetch user tasks");
   return res.json();
 };
+const fetchUsers = async () => {
+  const token = localStorage.getItem("token");
+  console.log(token);
+  if (!token) throw new Error("no token found");
+  const res = await axios.get("http://localhost:4000/api/users", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+
 
 const TaskDashboard = () => {
   const { id } = useParams();
@@ -23,15 +34,24 @@ const TaskDashboard = () => {
     enabled: !!id,
   });
 
-  // Préparer le tableau de tâches et ajouter userId à chaque tâche
+  const {
+      data: users = [],
+    } = useQuery({
+      queryKey: ["users"],
+      queryFn: fetchUsers,
+    });
+  
+const currentUser = users.find((u) => u._id === id);
+
+
   const tasksArray = data?.tasks?.map(t => ({
   _id: t._id,
-  departement: t.departement,
   task: t.task,
   startDate: t.startDate,
   endDate: t.endDate,
   status: t.status,
-  userId: id, // 👈 IMPORTANT pour Edit/Delete
+  userId: id, 
+  departement: currentUser?.departement || "-",
 })) || [];
 
 
@@ -40,7 +60,7 @@ const TaskDashboard = () => {
 
   return (
     <div className="user-dashboard">
-      <div className="dashboard-actions">
+      <div className="dashboard-actionss">
         <Link to={`/add-task-user/${id}`} className="add-btn-link">
           <button className="add-btn">
             <AddTaskIcon /> ADD Task
@@ -51,11 +71,17 @@ const TaskDashboard = () => {
       <div className="table-container">
         <DataTable
           columns={columns}
-          data={tasksArray}
+          data={tasksArray}{...data}
           keyField="_id"
           pagination
           highlightOnHover
           striped
+          conditionalRowStyles={[
+    { when: (row) => row.status === 1, style: { backgroundColor: "#d3d3d3", color: "#000" } },
+    { when: (row) => row.status === 2, style: { backgroundColor: "#FFD8A8", color: "#000" } },
+    { when: (row) => row.status === 3, style: { backgroundColor: "#A8E6CF", color: "#000" } },
+
+  ]}
         />
       </div>
     </div>

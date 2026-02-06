@@ -165,6 +165,17 @@ border-bottom-right-radius: 100px;
     color: #654ea3;
 }
 
+.error-text {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+.error-message {
+    color: red;
+    margin: 10px 0;
+    font-weight: bold;
+}
 
 
 

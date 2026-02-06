@@ -33,14 +33,32 @@ export const getUserById = async (req, res) => {
 
 //update
 export const updateUser = async (req, res) => {
-  const { username, email, role } = req.body;
-  const updateData = { username, email, role };
-  if (req.file) updateData.profil = req.file.path;
+  try {
+    const { username, email, role, departement } = req.body;
 
-  const updatedUser = await User.findByIdAndUpdate(req.params.id, updateData, { new: true }).select("-password");
-  res.json(updatedUser);
+    const updateData = { username, email, role, departement };
+
+    if (req.file) {
+      updateData.profil = req.file.path;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Update failed", error: error.message });
+  }
 };
-//delete
+
 
 export const deleteUser = async (req, res) => {
   const deletedUser = await User.findByIdAndDelete(req.params.id);
